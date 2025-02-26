@@ -3,36 +3,43 @@ const fs = require('fs');
 // Path to the JSON file
 const filePath = 'aboutblank.json';
 
-// New submission data (replace with actual data later)
+// Example: This will be replaced by real form submission data later
 const newSubmission = {
     timestamp: new Date().toISOString(),
-    field: "Example Field - About Blank",
-    value: "Example Value"
+    "Order Number": "123456",
+    "Brand": "About Blank",
+    "Customer Name": "John Doe",
+    "Customer Email": "john@example.com",
+    "Order Date": "2025-02-26",
+    "Shipping Address": "123 Main St, City, Country",
+    "Product SKU": "AB-001",
+    "Product Name": "T-Shirt",
+    "Quantity Ordered": 2,
+    "Reason for Return": "Wrong Size",
+    "Additional Notes": "Customer wants to exchange for a larger size"
 };
 
 // Read the existing JSON file
 fs.readFile(filePath, 'utf8', (err, data) => {
-    if (err) {
-        console.error("Error reading file:", err);
-        return;
-    }
-
     let submissions = [];
-    try {
-        submissions = JSON.parse(data);
-    } catch (error) {
-        console.error("Error parsing JSON:", error);
+
+    if (!err) {
+        try {
+            submissions = JSON.parse(data); // Parse existing data
+        } catch (error) {
+            console.error("Error parsing JSON:", error);
+        }
     }
 
-    // Add the new submission
+    // Append the new submission
     submissions.push(newSubmission);
 
-    // Write the updated data back to the file
+    // Write back to the JSON file
     fs.writeFile(filePath, JSON.stringify(submissions, null, 4), 'utf8', (err) => {
         if (err) {
             console.error("Error writing file:", err);
-            return;
+        } else {
+            console.log("New submission added successfully!");
         }
-        console.log("New submission added successfully!");
     });
 });
