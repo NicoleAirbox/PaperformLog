@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Submission Log</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 10px;
+        }
+        th {
+            background: #f4f4f4;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Live Submission Log</h1>
+    <table id="logTable">
+<thead>
+    <tr>
+        <th>Timestamp</th>
+        <th>Field</th>
+        <th>Answer</th>
+    </tr>
+</thead>
+        <tbody>
+            <!-- New submissions will appear here -->
+        </tbody>
+    </table>
+
+<script>
+    const eventSource = new EventSource('http://localhost:5500/events');
+
+    eventSource.onmessage = function(event) {
+        const data = JSON.parse(event.data);
+        console.log("Received Data:", data);  // Debugging log
+
+        if (data && data.data) {
+            addToTable(data.data);
+        }
+    };
+
+    function addToTable(fields) {
+        const table = document.getElementById("logTable").getElementsByTagName('tbody')[0];
+
+        fields.forEach(field => {
+            const newRow = table.insertRow();
+            newRow.insertCell(0).innerText = new Date().toLocaleString();
+            newRow.insertCell(1).innerText = field.title || "N/A";
+            newRow.insertCell(2).innerText = Array.isArray(field.value) ? field.value.join(", ") : (field.value || "N/A");
+        });
+    }
+</script>
+
+</body>
+</html>
