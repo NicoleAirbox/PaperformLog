@@ -64,7 +64,7 @@
 </script>
 <script>
     async function fetchSubmissions() {
-        const response = await fetch('https://NicoleAirbox.github.io/PaperformLog/aboutblank.json');
+        const response = await fetch('https://airboxfulfilment-inboundlist.com/aboutblank.json');
         const data = await response.json();
         console.log("Loaded JSON Data:", data); // 👈 Add this for debugging
     }
@@ -82,7 +82,7 @@
     });
 });
 
-    }
+
   
     fetchSubmissions(); // Run on page load
     setInterval(fetchSubmissions, 5000); // Refresh every 5 seconds
