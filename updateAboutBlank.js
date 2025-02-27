@@ -9,9 +9,9 @@ const JSON_FILE_PATH = 'aboutblank.json';
 // Function to fetch latest submissions from Paperform
 async function fetchPaperformSubmissions() {
     try {
-        const response = await axios.get(https://api.paperform.co/v1/forms/${FORM_ID}/submissions, {
+        const response = await axios.get(`https://api.paperform.co/v1/forms/${FORM_ID}/submissions`, {
             headers: {
-                Authorization: Bearer ${PAPERFORM_API_KEY},
+                Authorization: `Bearer ${PAPERFORM_API_KEY}`,
             },
         });
 
