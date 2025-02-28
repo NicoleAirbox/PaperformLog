@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About Blank Submissions</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -25,61 +27,84 @@
         }
         th {
             background: #f4f4f4;
+            cursor: pointer; /* Indicate sortable column */
+        }
+        /* Styles for the search bar */
+        #searchBar {
+            width: 300px;
+            margin: 20px auto;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
         }
     </style>
 </head>
 <body>
 
-    <h1>Live Submission Log</h1>
-    <div class="table-container">
-        <table id="logTable">
-            <thead>
-                <tr>
-                    <th>Submitted At</th>
-                    <th>Brand</th>
-                    <th>Staff member</th>
-                    <th>Supplier</th>
-                    <th>Receiving warehouse</th>
-                    <th>Shipment type</th>
-                    <th>Haulier/Courier</th>
-                    <th>Container type</th>
-                    <th>Container unloading type</th>
-                    <th>Tracking</th>
-                    <th>Movement reference number (MRN)</th>
-                    <th>MRN information</th>
-                    <th>Domestic delivery</th>
-                    <th>Date of shipment arrival</th>
-                    <th>Date of product launch</th>
-                    <th>Unit quantity</th>
-                    <th>Carton quantity</th>
-                    <th>Pallet quantity</th>
-                    <th>Allocation type</th>
-                    <th>Mixed shipment</th>
-                    <th>ASN ID number(s)</th>
-                    <th>Stock movement</th>
-                    <th>Prepacks ASN file</th>
-                    <th>Packing list name</th>
-                    <th>Outer labels</th>
-                    <th>Documents</th>
-                    <th>System status</th>
-                    <th>Stock status</th>
-                    <th>Remedial work</th>
-                    <th>Remedial work details</th>
-                    <th>Remedial work files</th>
-                    <th>Pre-order</th>
-                    <th>Launch date of pre-order</th>
-                    <th>Launch time of pre-order</th>
-                    <th>Pre-order SKUs</th>
-                    <th>Further comments</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- New submissions will appear here -->
-            </tbody>
-        </table>
+    <div class="container">
+        <h1>Live Submission Log</h1>
+
+        <!-- Search Bar -->
+        <input type="text" id="searchBar" placeholder="Search submissions...">
+
+        <div class="table-container">
+            <table id="logTable" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th data-column="timestamp">Submitted At</th>
+                        <th data-column="Brand">Brand</th>
+                        <th data-column="Staff member">Staff member</th>
+                        <th data-column="Supplier">Supplier</th>
+                        <th data-column="Receiving warehouse">Receiving warehouse</th>
+                        <th data-column="Shipment type">Shipment type</th>
+                        <th data-column="Haulier/Courier">Haulier/Courier</th>
+                        <th data-column="Container type">Container type</th>
+                        <th data-column="Container unloading type">Container unloading type</th>
+                        <th data-column="Tracking">Tracking</th>
+                        <th data-column="Movement reference number (MRN)">Movement reference number (MRN)</th>
+                        <th data-column="MRN information">MRN information</th>
+                        <th data-column="Domestic delivery">Domestic delivery</th>
+                        <th data-column="Date of shipment arrival">Date of shipment arrival</th>
+                        <th data-column="Date of product launch">Date of product launch</th>
+                        <th data-column="Unit quantity">Unit quantity</th>
+                        <th data-column="Carton quantity">Carton quantity</th>
+                        <th data-column="Pallet quantity">Pallet quantity</th>
+                        <th data-column="Allocation type">Allocation type</th>
+                        <th data-column="Mixed shipment">Mixed shipment</th>
+                        <th data-column="ASN ID number(s)">ASN ID number(s)</th>
+                        <th data-column="Stock movement">Stock movement</th>
+                        <th data-column="Prepacks ASN file">Prepacks ASN file</th>
+                        <th data-column="Packing list name">Packing list name</th>
+                        <th data-column="Outer labels">Outer labels</th>
+                        <th data-column="Documents">Documents</th>
+                        <th data-column="System status">System status</th>
+                        <th data-column="Stock status">Stock status</th>
+                        <th data-column="Remedial work">Remedial work</th>
+                        <th data-column="Remedial work details">Remedial work details</th>
+                        <th data-column="Remedial work files">Remedial work files</th>
+                        <th data-column="Pre-order">Pre-order</th>
+                        <th data-column="Launch date of pre-order">Launch date of pre-order</th>
+                        <th data-column="Launch time of pre-order">Launch time of pre-order</th>
+                        <th data-column="Pre-order SKUs">Pre-order SKUs</th>
+                        <th data-column="Further comments">Further comments</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- New submissions will appear here -->
+                </tbody>
+            </table>
+        </div>
     </div>
 
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
     <script>
+        let allSubmissions = []; // Store all submissions
+        let currentSortColumn = null;
+        let currentSortDirection = 'asc';
+
         async function fetchSubmissions() {
             try {
                 const response = await fetch('aboutblank.json');
@@ -101,54 +126,126 @@
                     return; // Exit if the file is empty
                 }
 
-                console.log("Fetched Data:", data);
-
-                const table = document.getElementById("logTable").getElementsByTagName('tbody')[0];
-                table.innerHTML = "";
-
-                data.forEach(entry => {
-                    const newRow = table.insertRow();
-                    newRow.insertCell(0).innerText = entry["timestamp"] ? new Date(entry["timestamp"]).toLocaleString() : "";
-                    newRow.insertCell(1).innerText = entry["Brand"] || "";
-                    newRow.insertCell(2).innerText = entry["Staff member"] || "";
-                    newRow.insertCell(3).innerText = entry["Supplier"] || "";
-                    newRow.insertCell(4).innerText = entry["Receiving warehouse"] || "";
-                    newRow.insertCell(5).innerText = entry["Shipment type"] || "";
-                    newRow.insertCell(6).innerText = entry["Haulier/Courier"] || "";
-                    newRow.insertCell(7).innerText = entry["Container type"] || "";
-                    newRow.insertCell(8).innerText = entry["Container unloading type"] || "";
-                    newRow.insertCell(9).innerText = entry["Tracking"] || "";
-                    newRow.insertCell(10).innerText = entry["Movement reference number (MRN)"] || "";
-                    newRow.insertCell(11).innerText = entry["MRN information"] || "";
-                    newRow.insertCell(12).innerText = entry["Domestic delivery"] || "";
-                    newRow.insertCell(13).innerText = entry["Date of shipment arrival"] || "";
-                    newRow.insertCell(14).innerText = entry["Date of product launch"] || "";
-                    newRow.insertCell(15).innerText = entry["Unit quantity"] || "";
-                    newRow.insertCell(16).innerText = entry["Carton quantity"] || "";
-                    newRow.insertCell(17).innerText = entry["Pallet quantity"] || "";
-                    newRow.insertCell(18).innerText = entry["Allocation type"] || "";
-                    newRow.insertCell(19).innerText = entry["Mixed shipment"] || "";
-                    newRow.insertCell(20).innerText = entry["ASN ID number(s)"] || "";
-                    newRow.insertCell(21).innerText = entry["Stock movement"] || "";
-                    newRow.insertCell(22).innerText = entry["Prepacks ASN file"] || "";
-                    newRow.insertCell(23).innerText = entry["Packing list name"] || "";
-                    newRow.insertCell(24).innerText = entry["Outer labels"] || "";
-                    newRow.insertCell(25).innerText = entry["Documents"] || "";
-                    newRow.insertCell(26).innerText = entry["System status"] || "";
-                    newRow.insertCell(27).innerText = entry["Stock status"] || "";
-                    newRow.insertCell(28).innerText = entry["Remedial work"] || "";
-                    newRow.insertCell(29).innerText = entry["Remedial work details"] || "";
-                    newRow.insertCell(30).innerText = entry["Remedial work files"] || "";
-                    newRow.insertCell(31).innerText = entry["Pre-order"] || "";
-                    newRow.insertCell(32).innerText = entry["Launch date of pre-order"] || "";
-                    newRow.insertCell(33).innerText = entry["Launch time of pre-order"] || "";
-                    newRow.insertCell(34).innerText = entry["Pre-order SKUs"] || "";
-                    newRow.insertCell(35).innerText = entry["Further comments"] || "";
-                });
+                allSubmissions = data; // Store all submissions
+                renderTable(data);
             } catch (error) {
                 console.error("Error fetching submissions:", error);
             }
         }
+
+        function renderTable(data) {
+            const table = document.getElementById("logTable").getElementsByTagName('tbody')[0];
+            table.innerHTML = "";
+
+            data.forEach(entry => {
+                const newRow = table.insertRow();
+                newRow.insertCell(0).innerText = entry["timestamp"] ? new Date(entry["timestamp"]).toLocaleString() : "";
+                newRow.insertCell(1).innerText = entry["Brand"] || "";
+                newRow.insertCell(2).innerText = entry["Staff member"] || "";
+                newRow.insertCell(3).innerText = entry["Supplier"] || "";
+                newRow.insertCell(4).innerText = entry["Receiving warehouse"] || "";
+                newRow.insertCell(5).innerText = entry["Shipment type"] || "";
+                newRow.insertCell(6).innerText = entry["Haulier/Courier"] || "";
+                newRow.insertCell(7).innerText = entry["Container type"] || "";
+                newRow.insertCell(8).innerText = entry["Container unloading type"] || "";
+                newRow.insertCell(9).innerText = entry["Tracking"] || "";
+                newRow.insertCell(10).innerText = entry["Movement reference number (MRN)"] || "";
+                newRow.insertCell(11).innerText = entry["MRN information"] || "";
+                newRow.insertCell(12).innerText = entry["Domestic delivery"] || "";
+                newRow.insertCell(13).innerText = entry["Date of shipment arrival"] || "";
+                newRow.insertCell(14).innerText = entry["Date of product launch"] || "";
+                newRow.insertCell(15).innerText = entry["Unit quantity"] || "";
+                newRow.insertCell(16).innerText = entry["Carton quantity"] || "";
+                newRow.insertCell(17).innerText = entry["Pallet quantity"] || "";
+                newRow.insertCell(18).innerText = entry["Allocation type"] || "";
+                newRow.insertCell(19).innerText = entry["Mixed shipment"] || "";
+                newRow.insertCell(20).innerText = entry["ASN ID number(s)"] || "";
+                newRow.insertCell(21).innerText = entry["Stock movement"] || "";
+                newRow.insertCell(22).innerText = entry["Prepacks ASN file"] || "";
+                newRow.insertCell(23).innerText = entry["Packing list name"] || "";
+                newRow.insertCell(24).innerText = entry["Outer labels"] || "";
+
+                // Create a download link for documents
+                const documentsCell = newRow.insertCell(25);
+                const documents = entry["Documents"];
+                if (documents) {
+                    if (Array.isArray(documents)) {
+                        documents.forEach(doc => {
+                            const a = document.createElement('a');
+                            a.href = doc.url;
+                            a.textContent = doc.name;
+                            a.download = doc.name; // Suggest a filename for download
+                            documentsCell.appendChild(a);
+                            documentsCell.appendChild(document.createElement('br')); // Add a line break for multiple documents
+                        });
+                    } else {
+                        const a = document.createElement('a');
+                        a.href = documents;
+                        a.textContent = documents;
+                        a.download = documents; // Suggest a filename for download
+                        documentsCell.appendChild(a);
+                    }
+                }
+
+                newRow.insertCell(26).innerText = entry["System status"] || "";
+                newRow.insertCell(27).innerText = entry["Stock status"] || "";
+                newRow.insertCell(28).innerText = entry["Remedial work"] || "";
+                newRow.insertCell(29).innerText = entry["Remedial work details"] || "";
+                newRow.insertCell(30).innerText = entry["Remedial work files"] || "";
+                newRow.insertCell(31).innerText = entry["Pre-order"] || "";
+                newRow.insertCell(32).innerText = entry["Launch date of pre-order"] || "";
+                newRow.insertCell(33).innerText = entry["Launch time of pre-order"] || "";
+                newRow.insertCell(34).innerText = entry["Pre-order SKUs"] || "";
+                newRow.insertCell(35).innerText = entry["Further comments"] || "";
+            });
+        }
+
+        function sortTable(column) {
+            if (column === currentSortColumn) {
+                currentSortDirection = currentSortDirection === 'asc' ? 'desc' : 'asc';
+            } else {
+                currentSortColumn = column;
+                currentSortDirection = 'asc';
+            }
+
+            const sortedData = [...allSubmissions].sort((a, b) => {
+                const valueA = a[column] || '';
+                const valueB = b[column] || '';
+
+                if (valueA < valueB) {
+                    return currentSortDirection === 'asc' ? -1 : 1;
+                }
+                if (valueA > valueB) {
+                    return currentSortDirection === 'asc' ? 1 : -1;
+                }
+                return 0;
+            });
+
+            renderTable(sortedData);
+        }
+
+        function searchTable() {
+            const searchTerm = document.getElementById('searchBar').value.toLowerCase();
+            const filteredData = allSubmissions.filter(entry => {
+                for (const key in entry) {
+                    if (entry[key] && entry[key].toString().toLowerCase().includes(searchTerm)) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            renderTable(filteredData);
+        }
+
+        // Event listeners
+        document.getElementById('searchBar').addEventListener('input', searchTable);
+
+        // Add click event listeners to table headers for sorting
+        document.querySelectorAll('th[data-column]').forEach(header => {
+            header.addEventListener('click', () => {
+                sortTable(header.dataset.column);
+            });
+        });
 
         // Run on page load
         fetchSubmissions();
