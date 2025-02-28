@@ -7,7 +7,7 @@
     "Receiving warehouse": "Airbox Zero (TW4)",
     "Shipment type": "",
     "Haulier/Courier": "",
-    "Container type": [],
+    "Container type": "",
     "Container unloading type": "",
     "Tracking": "",
     "Movement reference number (MRN)": "No",
@@ -18,9 +18,7 @@
     "Unit quantity": "0",
     "Carton quantity": "0",
     "Pallet quantity": "0",
-    "Allocation type": [
-      "E-commerce"
-    ],
+    "Allocation type": "E-commerce",
     "Mixed shipment": "",
     "ASN ID number(s)": "",
     "Stock movement": "",
@@ -32,7 +30,7 @@
     "Stock status": "Yes",
     "Remedial work": "No",
     "Remedial work details": "",
-    "Remedial work files": [],
+    "Remedial work files": "",
     "Pre-order": "No",
     "Launch date of pre-order": "",
     "Launch time of pre-order": "",
@@ -45,11 +43,9 @@
     "Staff member": "info@about---blank.com",
     "Supplier": "SLN GIYM",
     "Receiving warehouse": "Airbox 18 (LU7)",
-    "Shipment type": [
-      "Pallet"
-    ],
+    "Shipment type": "Pallet",
     "Haulier/Courier": "Empire Logistics",
-    "Container type": [],
+    "Container type": "",
     "Container unloading type": "",
     "Tracking": "",
     "Movement reference number (MRN)": "No",
@@ -60,10 +56,7 @@
     "Unit quantity": "1750",
     "Carton quantity": "44",
     "Pallet quantity": "2",
-    "Allocation type": [
-      "E-commerce",
-      "Wholesale (pick and pack)"
-    ],
+    "Allocation type": "E-commerce, Wholesale (pick and pack)",
     "Mixed shipment": "Yes",
     "ASN ID number(s)": "TBC",
     "Stock movement": "TBC",
@@ -75,7 +68,7 @@
     "Stock status": "Yes",
     "Remedial work": "No",
     "Remedial work details": "",
-    "Remedial work files": [],
+    "Remedial work files": "",
     "Pre-order": "No",
     "Launch date of pre-order": "",
     "Launch time of pre-order": "",
@@ -88,11 +81,9 @@
     "Staff member": "info@about---blank.com",
     "Supplier": "Knit Creation (HK) Co., Ltd.",
     "Receiving warehouse": "Airbox 18 (LU7)",
-    "Shipment type": [
-      "Pallet"
-    ],
+    "Shipment type": "Pallet",
     "Haulier/Courier": "Empire Logistics",
-    "Container type": [],
+    "Container type": "",
     "Container unloading type": "",
     "Tracking": "",
     "Movement reference number (MRN)": "No",
@@ -103,10 +94,7 @@
     "Unit quantity": "612",
     "Carton quantity": "16",
     "Pallet quantity": "1",
-    "Allocation type": [
-      "Wholesale (pick and pack)",
-      "E-commerce"
-    ],
+    "Allocation type": "Wholesale (pick and pack), E-commerce",
     "Mixed shipment": "Yes",
     "ASN ID number(s)": "TBC",
     "Stock movement": "TBC",
@@ -118,7 +106,7 @@
     "Stock status": "Yes",
     "Remedial work": "No",
     "Remedial work details": "",
-    "Remedial work files": [],
+    "Remedial work files": "",
     "Pre-order": "No",
     "Launch date of pre-order": "",
     "Launch time of pre-order": "",
@@ -131,9 +119,7 @@
     "Staff member": "info@about---blank.com",
     "Supplier": "Refuel Global Brands",
     "Receiving warehouse": "Airbox Zero (TW4)",
-    "Shipment type": [
-      "Loose carton"
-    ],
+    "Shipment type": "Loose carton",
     "Haulier/Courier": "Empire Logistics",
     "Container type": "",
     "Container unloading type": "",
@@ -146,28 +132,19 @@
     "Unit quantity": "694",
     "Carton quantity": "7",
     "Pallet quantity": "0",
-    "Allocation type": [
-      "E-commerce"
-    ],
+    "Allocation type": "E-commerce",
     "Mixed shipment": "",
     "ASN ID number(s)": "100018/1",
     "Stock movement": "",
     "Prepacks ASN file": "",
     "Packing list name": "100018 PL (Refuel)",
     "Outer labels": "Yes",
-    "Documents": [
-      {
-        "url": "https://s3.amazonaws.com/pf-user-files-01/t-341523/uploads/2025-02-03/fo13wc0/100018%20PL%20Refuel.xlsx",
-        "name": "100018 PL (Refuel).xlsx",
-        "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        "size": 18673
-      }
-    ],
+    "Documents": "100018 PL (Refuel).xlsx",
     "System status": "Yes",
     "Stock status": "Yes",
     "Remedial work": "No",
     "Remedial work details": "",
-    "Remedial work files": [],
+    "Remedial work files": "",
     "Pre-order": "No",
     "Launch date of pre-order": "",
     "Launch time of pre-order": "",
@@ -180,9 +157,7 @@
     "Staff member": "info@about---blank.com",
     "Supplier": "Option 1",
     "Receiving warehouse": "Airbox Zero (TW4)",
-    "Shipment type": [
-      "Pallet"
-    ],
+    "Shipment type": "Pallet",
     "Haulier/Courier": "Empire Logistics",
     "Container type": "",
     "Container unloading type": "",
@@ -195,28 +170,19 @@
     "Unit quantity": "1468",
     "Carton quantity": "126",
     "Pallet quantity": "2",
-    "Allocation type": [
-      "E-commerce"
-    ],
+    "Allocation type": "E-commerce",
     "Mixed shipment": "",
     "ASN ID number(s)": "100017/3",
     "Stock movement": "",
     "Prepacks ASN file": "",
     "Packing list name": "100017 KNIT",
     "Outer labels": "Yes",
-    "Documents": [
-      {
-        "url": "https://s3.amazonaws.com/pf-user-files-01/t-341523/uploads/2025-01-30/nx23w0n/100017%20KNIT.xlsx",
-        "name": "100017 KNIT.xlsx",
-        "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        "size": 152941
-      }
-    ],
+    "Documents": "100017 KNIT.xlsx",
     "System status": "Yes",
     "Stock status": "Yes",
     "Remedial work": "No",
     "Remedial work details": "",
-    "Remedial work files": [],
+    "Remedial work files": "",
     "Pre-order": "No",
     "Launch date of pre-order": "",
     "Launch time of pre-order": "",
