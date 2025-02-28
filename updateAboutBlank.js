@@ -23,7 +23,7 @@ async function fetchPaperformSubmissions() {
 
         console.log("Raw API Response:", JSON.stringify(response.data, null, 2));
 
-        if (!response.data || !response.data.data) {
+        if (!response.data || !response.data.results || !response.data.results.submissions) {
             console.error("Unexpected API response structure:", response.data);
             return [];
         }
