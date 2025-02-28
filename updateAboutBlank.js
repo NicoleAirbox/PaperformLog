@@ -14,7 +14,7 @@ async function fetchPaperformSubmissions() {
         if (!PAPERFORM_API_KEY) {
             throw new Error("Paperform API key is missing.  Make sure it's set in your environment variables.");
         }
-        console.log("Raw API Response:", JSON.stringify(response.data, null, 2));
+
         const response = await axios.get(`https://api.paperform.co/v1/forms/${FORM_ID}/submissions?limit=100`, {
             headers: {
                 Authorization: `Bearer ${PAPERFORM_API_KEY}`,
