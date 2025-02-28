@@ -1,7 +1,7 @@
 require('dotenv').config({ path: '.env' }); // Specify the path to .env
+console.log("API Key:", process.env.PAPERFORM_API_KEY); // Add this line for debugging
 const fs = require('fs');
 const axios = require('axios');
-require('dotenv').config(); // Load environment variables from .env file (if using locally)
 
 // Environment variables (safer than hardcoding)
 const PAPERFORM_API_KEY = process.env.PAPERFORM_API_KEY;
@@ -15,7 +15,7 @@ async function fetchPaperformSubmissions() {
             throw new Error("Paperform API key is missing.  Make sure it's set in your environment variables.");
         }
 
-        const response = await axios.get(`https://api.paperform.co/v1/forms/${FORM_ID}/submissions`, {
+        const response = await axios.get(`https://api.paperform.co/v1/forms/${FORM_ID}/submissions?limit=100`, {
             headers: {
                 Authorization: `Bearer ${PAPERFORM_API_KEY}`,
             },
@@ -23,12 +23,12 @@ async function fetchPaperformSubmissions() {
 
         console.log("Raw API Response:", JSON.stringify(response.data, null, 2));
 
-        if (!response.data || !response.data.results || !response.data.results.submissions) {
+        if (!response.data || !response.data.data) {
             console.error("Unexpected API response structure:", response.data);
             return [];
         }
-
-        return response.data.results.submissions;
+    
+        return response.data.data;
     } catch (error) {
         console.error('Error fetching data from Paperform:', error);
         return [];
@@ -60,7 +60,7 @@ async function updateSubmissions() {
 
         // Format new submissions and add them to existing data
         const formattedSubmissions = submissions.map(sub => ({
-            timestamp: new Date(sub.created_at_utc).toISOString(),
+            timestamp: new Date(sub.created_at).toISOString(),
             "Brand": sub.data["6fj0"] || "",
             "Staff member": sub.data["dr256"] || "",
             "Supplier": sub.data["b9v5k"] ? sub.data["b9v5k"].join(", ") : "",
