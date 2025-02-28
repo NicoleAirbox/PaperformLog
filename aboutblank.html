@@ -1,3 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Blank Submissions</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Datepicker CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        .table-container {
+            width: 100%;
+            overflow-x: auto; /* Enables horizontal scrolling */
+        }
+        table {
+            width: 200%; /* Ensure table is wider than screen */
+            border-collapse: collapse;
+            margin: 20px auto;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 10px;
+            white-space: nowrap; /* Prevents text from wrapping */
+        }
+        th {
+            background: #f4f4f4;
+            cursor: pointer; /* Indicate sortable column */
+        }
+        /* Styles for the search bar */
+        #searchBar {
+            width: 300px;
+            margin: 10px auto; /* Reduced margin */
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .highlight {
+            background-color: lightgreen;
+        }
+        /* Styles for the date range pickers */
+        .date-range-container {
+            display: flex;
+            justify-content: center;
+            margin: 10px auto;
+        }
+        .date-range-container input {
+            width: 150px;
+            margin: 0 5px;
+        }
+        /* Smaller button style */
+        #downloadCsvButton {
+            padding: 5px 10px;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Live Submission Log</h1>
+
+        <!-- Search and Filter Section -->
+        <div>
+            <!-- Date Range Filters for "Submitted At" -->
+            <div class="date-range-container">
+                <label for="submittedAtFrom">Submitted At From:</label>
+                <input type="text" id="submittedAtFrom" class="datepicker" placeholder="From Date">
+                <label for="submittedAtTo">To:</label>
+                <input type="text" id="submittedAtTo" class="datepicker" placeholder="To Date">
+            </div>
+
+            <!-- Date Range Filters for "Date of Shipment Arrival" -->
+            <div class="date-range-container">
+                <label for="shipmentArrivalFrom">Shipment Arrival From:</label>
+                <input type="text" id="shipmentArrivalFrom" class="datepicker" placeholder="From Date">
+                <label for="shipmentArrivalTo">To:</label>
+                <input type="text" id="shipmentArrivalTo" class="datepicker" placeholder="To Date">
+            </div>
+
+            <!-- Column Search -->
+            <select id="columnSelect">
+                <option value="">Select Column</option>
+                <option value="timestamp">Submitted At</option>
+                <option value="Brand">Brand</option>
+                <option value="Staff member">Staff member</option>
+                <option value="Supplier">Supplier</option>
+                <option value="Receiving warehouse">Receiving warehouse</option>
+                <option value="Shipment type">Shipment type</option>
+                <option value="Haulier/Courier">Haulier/Courier</option>
+                <option value="Container type">Container type</option>
+                <option value="Container unloading type">Container unloading type</option>
+                <option value="Tracking">Tracking</option>
+                <option value="Movement reference number (MRN)">Movement reference number (MRN)</option>
+                <option value="MRN information">MRN information</option>
+                <option value="Domestic delivery">Domestic delivery</option>
+                <option value="Date of shipment arrival">Date of shipment arrival</option>
+                <option value="Date of product launch">Date of product launch</option>
+                <option value="Unit quantity">Unit quantity</option>
+                <option value="Carton quantity">Carton quantity</option>
+                <option value="Pallet quantity">Pallet quantity</option>
+                <option value="Allocation type">Allocation type</option>
+                <option value="Mixed shipment">Mixed shipment</option>
+                <option value="ASN ID number(s)">ASN ID number(s)</option>
+                <option value="Stock movement">Stock movement</option>
+                <option value="Prepacks ASN file">Prepacks ASN file</option>
+                <option value="Packing list name">Packing list name</option>
+                <option value="Outer labels">Outer labels</option>
+                <option value="Documents">Documents</option>
+                <option value="System status">System status</option>
+                <option value="Stock status">Stock status</option>
+                <option value="Remedial work">Remedial work</option>
+                <option value="Remedial work details">Remedial work details</option>
+                <option value="Remedial work files">Remedial work files</option>
+                <option value="Pre-order">Pre-order</option>
+                <option value="Launch date of pre-order">Launch date of pre-order</option>
+                <option value="Launch time of pre-order">Launch time of pre-order</option>
+                <option value="Pre-order SKUs">Pre-order SKUs</option>
+                <option value="Further comments">Further comments</option>
+            </select>
+            <input type="text" id="searchInput" placeholder="Enter search term">
+            <button id="searchButton">Go</button>
+            <!-- Reset Button -->
+            <button id="resetButton" class="btn btn-secondary">Reset</button>
+        </div>
+
+        <!-- CSV Download Button -->
+        <button id="downloadCsvButton" class="btn btn-primary">Download as CSV</button>
+
+        <div class="table-container">
+            <table id="logTable" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th data-column="timestamp">Submitted At</th>
+                        <th data-column="Brand">Brand</th>
+                        <th data-column="Staff member">Staff member</th>
+                        <th data-column="Supplier">Supplier</th>
+                        <th data-column="Receiving warehouse">Receiving warehouse</th>
+                        <th data-column="Shipment type">Shipment type</th>
+                        <th data-column="Haulier/Courier">Haulier/Courier</th>
+                        <th data-column="Container type">Container type</th>
+                        <th data-column="Container unloading type">Container unloading type</th>
+                        <th data-column="Tracking">Tracking</th>
+                        <th data-column="Movement reference number (MRN)">Movement reference number (MRN)</th>
+                        <th data-column="MRN information">MRN information</th>
+                        <th data-column="Domestic delivery">Domestic delivery</th>
+                        <th data-column="Date of shipment arrival">Date of shipment arrival</th>
+                        <th data-column="Date of product launch">Date of product launch</th>
+                        <th data-column="Unit quantity">Unit quantity</th>
+                        <th data-column="Carton quantity">Carton quantity</th>
+                        <th data-column="Pallet quantity">Pallet quantity</th>
+                        <th data-column="Allocation type">Allocation type</th>
+                        <th data-column="Mixed shipment">Mixed shipment</th>
+                        <th data-column="ASN ID number(s)">ASN ID number(s)</th>
+                        <th data-column="Stock movement">Stock movement</th>
+                        <th data-column="Prepacks ASN file">Prepacks ASN file</th>
+                        <th data-column="Packing list name">Packing list name</th>
+                        <th data-column="Outer labels">Outer labels</th>
+                        <th data-column="Documents">Documents</th>
+                        <th data-column="System status">System status</th>
+                        <th data-column="Stock status">Stock status</th>
+                        <th data-column="Remedial work">Remedial work</th>
+                        <th data-column="Remedial work details">Remedial work details</th>
+                        <th data-column="Remedial work files">Remedial work files</th>
+                        <th data-column="Pre-order">Pre-order</th>
+                        <th data-column="Launch date of pre-order">Launch date of pre-order</th>
+                        <th data-column="Launch time of pre-order">Launch time of pre-order</th>
+                        <th data-column="Pre-order SKUs">Pre-order SKUs</th>
+                        <th data-column="Further comments">Further comments</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- New submissions will appear here -->
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Datepicker JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+
+    <script>
 let allSubmissions = [];
 let filteredSubmissions = [];
 let currentSortColumn = 'timestamp';
@@ -49,7 +240,7 @@ async function fetchSubmissions() {
 function renderTable(data) {
     const table = document.getElementById("logTable").getElementsByTagName('tbody')[0];
     table.innerHTML = "";
-
+}
     data.forEach(entry => {
         const newRow = table.insertRow();
         newRow.insertCell(0).innerHTML = entry["timestamp"] ? moment(entry["timestamp"]).format('YYYY-MM-DD HH:mm:ss') : "";
@@ -77,7 +268,7 @@ function renderTable(data) {
         newRow.insertCell(22).innerText = entry["Prepacks ASN file"] || "";
         newRow.insertCell(23).innerText = entry["Packing list name"] || "";
         newRow.insertCell(24).innerText = entry["Outer labels"] || "";
-
+    
         const documentsCell = newRow.insertCell(25);
         const documents = entry["Documents"];
         if (documents) {
@@ -98,6 +289,7 @@ function renderTable(data) {
                 documentsCell.appendChild(a);
             }
         }
+    })
 function highlightSearchResults(searchTerm, column) {
     const table = document.getElementById("logTable");
     const rows = table.getElementsByTagName("tr");
@@ -282,7 +474,6 @@ document.getElementById("resetButton").addEventListener("click", resetFilters);
 
 fetchSubmissions();
 </script>
-
+ 
 </body>
-
 </html>
