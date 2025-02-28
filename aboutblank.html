@@ -1,263 +1,45 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Blank Submissions</title>
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <!-- Datepicker CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-        }
-        .table-container {
-            width: 100%;
-            overflow-x: auto; /* Enables horizontal scrolling */
-        }
-        table {
-            width: 200%; /* Ensure table is wider than screen */
-            border-collapse: collapse;
-            margin: 20px auto;
-        }
-        th, td {
-            border: 1px solid black;
-            padding: 10px;
-            white-space: nowrap; /* Prevents text from wrapping */
-        }
-        th {
-            background: #f4f4f4;
-            cursor: pointer; /* Indicate sortable column */
-        }
-        /* Styles for the search bar */
-        #searchBar {
-            width: 200px; /* Adjusted width */
-            margin: 10px auto;
-            padding: 5px; /* Adjusted padding */
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        .highlight {
-            background-color: lightgreen;
-        }
-        /* Styles for the date range pickers */
-        .date-range-container {
-            display: flex;
-            align-items: center; /* Align items vertically */
-            margin: 5px 0; /* Reduced vertical margin */
-            text-align: left; /* Align text to the left */
-        }
-        .date-range-container label {
-            margin-right: 5px; /* Add some space between label and input */
-        }
-        .date-range-container input {
-            width: 200px; /* Adjusted width to match search bar */
-            margin: 0 5px;
-            padding: 5px; /* Adjusted padding */
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        /* Smaller button style */
-        .button-style {
-            padding: 5px 10px;
-            font-size: 0.8rem;
-            width: 120px; /* Set a fixed width for all buttons */
-            border-radius: 5px;
-            border: none;
-            cursor: pointer;
-        }
-        #downloadCsvButton {
-            background-color: #007bff;
-            color: white;
-        }
-        #resetButton {
-            background-color: red;
-            color: white;
-        }
-        #searchButton {
-            background-color: green;
-            color: white;
-        }
-         /* Styles for the datepicker calendar */
-        .datepicker {
-            background-color: white; /* Ensure solid background */
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            font-size: 0.8em; /* Make the calendar smaller */
-        }
+let allSubmissions = [];
+let filteredSubmissions = [];
+let currentSortColumn = 'timestamp';
+let currentSortDirection = 'desc';
 
-        .datepicker table {
-            width: auto; /* Adjust width to fit content */
-            margin: 0; /* Remove default margin */
-        }
-
-        .datepicker td,
-        .datepicker th {
-            padding: 0.2em 0.3em; /* Reduce padding for smaller size */
-            font-size: 0.9em;
-        }
-        /* Style for the select dropdown */
-        #columnSelect {
-            width: 200px; /* Adjusted width to match search bar */
-            padding: 5px; /* Adjusted padding */
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            margin-bottom: 10px; /* Add some space below the select */
-            text-align: left;
-        }
-        /* Style for the search input */
-        #searchInput {
-            width: 200px; /* Adjusted width to match search bar */
-            padding: 5px; /* Adjusted padding */
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            margin-bottom: 10px; /* Add some space below the select */
-            text-align: left;
-        }
-        /* Container for the search input and button */
-        #searchContainer {
-            text-align: right; /* Align content to the right */
-            margin-top: -30px; /* Move it above the table */
-            margin-bottom: 10px;
-        }
-    </style>
-</head>
-<body>
-
-    <div class="container">
-        <h1>Live Submission Log</h1>
-
-        <!-- Top Right Reset Button -->
-        <div style="text-align: right; margin-bottom: 10px;">
-            <button id="resetButton" class="button-style" style="background-color: red; color: white;">Reset Filter</button>
-        </div>
-
-        <!-- Search and Filter Section -->
-        <div style="display: flex; flex-direction: column; align-items: flex-start;">
-            <!-- Date Range Filters for "Submitted At" -->
-            <div class="date-range-container">
-                <label for="submittedAtFrom">Submitted At From:</label>
-                <input type="text" id="submittedAtFrom" class="datepicker" placeholder="From Date">
-            </div>
-            <div class="date-range-container">
-                <label for="submittedAtTo">Submitted At To:</label>
-                <input type="text" id="submittedAtTo" class="datepicker" placeholder="To Date">
-            </div>
-
-            <!-- Date Range Filters for "Date of Shipment Arrival" -->
-            <div class="date-range-container">
-                <label for="shipmentArrivalFrom">Shipment Arrival From:</label>
-                <input type="text" id="shipmentArrivalFrom" class="datepicker" placeholder="From Date">
-            </div>
-            <div class="date-range-container">
-                <label for="shipmentArrivalTo">Shipment Arrival To:</label>
-                <input type="text" id="shipmentArrivalTo" class="datepicker" placeholder="To Date">
-            </div>
-
-            <!-- Column Search -->
-            <select id="columnSelect">
-                <option value="">Select Column</option>
-                <option value="timestamp">Submitted At</option>
-                <option value="Brand">Brand</option>
-                <option value="Staff member">Staff member</option>
-                <option value="Supplier">Supplier</option>
-                <option value="Receiving warehouse">Receiving warehouse</option>
-                <option value="Shipment type">Shipment type</option>
-                <option value="Haulier/Courier">Haulier/Courier</option>
-                <option value="Container type">Container type</option>
-                <option value="Container unloading type">Container unloading type</option>
-                <option value="Tracking">Tracking</option>
-                <option value="Movement reference number (MRN)">Movement reference number (MRN)</option>
-                <option value="MRN information">MRN information</option>
-                <option value="Domestic delivery">Domestic delivery</option>
-                <option value="Date of shipment arrival">Date of shipment arrival</option>
-                <option value="Date of product launch">Date of product launch</option>
-                <option value="Unit quantity">Unit quantity</option>
-                <option value="Carton quantity">Carton quantity</option>
-                <option value="Pallet quantity">Pallet quantity</option>
-                <option value="Allocation type">Allocation type</option>
-                <option value="Mixed shipment">Mixed shipment</option>
-                <option value="ASN ID number(s)">ASN ID number(s)</option>
-                <option value="Stock movement">Stock movement</option>
-                <option value="Prepacks ASN file">Prepacks ASN file</option>
-                <option value="Packing list name">Packing list name</option>
-                <option value="Outer labels">Outer labels</option>
-                <option value="Documents">Documents</option>
-                <option value="System status">System status</option>
-                <option value="Stock status">Stock status</option>
-                <option value="Remedial work">Remedial work</option>
-                <th data-column="Remedial work details">Remedial work details</th>
-                        <th data-column="Remedial work files">Remedial work files</th>
-                        <th data-column="Pre-order">Pre-order</th>
-                        <th data-column="Launch date of pre-order">Launch date of pre-order</th>
-                        <th data-column="Launch time of pre-order">Launch time of pre-order</th>
-                        <th data-column="Pre-order SKUs">Pre-order SKUs</th>
-                        <th data-column="Further comments">Further comments</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- New submissions will appear here -->
-                </tbody>
-            </table>
-        </div>
-
-    </div>
-
-     <!-- Search Container -->
-    <div id="searchContainer">
-        <input type="text" id="searchInput" placeholder="Search">
-        <button id="searchButton" class="button-style" style="background-color: green; color: white;">Go</button>
-    </div>
-
-    <!-- CSV Download Button -->
-    <button id="downloadCsvButton" class="button-style">Download CSV</button>
-let allSubmissions = []; // Store all submissions
-let filteredSubmissions = []; // Store filtered submissions
-let currentSortColumn = 'timestamp'; // Default sort column
-let currentSortDirection = 'desc'; // Default sort direction (descending for "Submitted At")
-
-// Datepicker initialization
-$(document).ready(function() {
+$(document).ready(function () {
     $('.datepicker').datepicker({
         format: 'yyyy-mm-dd',
         autoclose: true,
-        container: 'body' // Ensure datepicker is appended to the body
+        container: 'body'
     });
 
-    // Override default datepicker styles to ensure solid background
-    $('.datepicker').on('show', function() {
+    $('.datepicker').on('show', function () {
         $('.datepicker-dropdown').css('background-color', 'white');
     });
 });
+
 async function fetchSubmissions() {
     try {
         const response = await fetch('aboutblank.json');
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
-        const text = await response.text(); // Get the response as text
+        const text = await response.text();
         let data = [];
 
-        if (text) { // Check if the response is not empty
+        if (text) {
             try {
-                data = JSON.parse(text); // Try to parse it as JSON
+                data = JSON.parse(text);
             } catch (e) {
                 console.error("Error parsing JSON:", e);
-                return; // Exit if parsing fails
+                return;
             }
         } else {
             console.log("aboutblank.json is empty.");
-            return; // Exit if the file is empty
+            return;
         }
 
-        // Sort by "Submitted At" in descending order (most recent first)
         data.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 
-        allSubmissions = data; // Store all submissions
-        filteredSubmissions = [...allSubmissions]; // Initially, filtered submissions are all submissions
+        allSubmissions = data;
+        filteredSubmissions = [...allSubmissions];
         renderTable(filteredSubmissions);
     } catch (error) {
         console.error("Error fetching submissions:", error);
@@ -296,61 +78,26 @@ function renderTable(data) {
         newRow.insertCell(23).innerText = entry["Packing list name"] || "";
         newRow.insertCell(24).innerText = entry["Outer labels"] || "";
 
-        // Create a download link for documents
         const documentsCell = newRow.insertCell(25);
         const documents = entry["Documents"];
         if (documents) {
             if (Array.isArray(documents)) {
                 documents.forEach(doc => {
                     const a = document.createElement('a');
-                    a.href = doc;  // Corrected: Use the URL directly
-                    a.textContent = doc.split('/').pop(); // Corrected: Extract filename from URL
-                    a.download = doc.split('/').pop(); // Suggest a filename for download
+                    a.href = doc;
+                    a.textContent = doc.split('/').pop();
+                    a.download = doc.split('/').pop();
                     documentsCell.appendChild(a);
-                    documentsCell.appendChild(document.createElement('br')); // Add a line break for multiple documents
+                    documentsCell.appendChild(document.createElement('br'));
                 });
             } else {
                 const a = document.createElement('a');
-                a.href = documents; // Corrected: Use the URL directly
-                a.textContent = documents.split('/').pop(); // Corrected: Extract filename from URL
-                a.download = documents.split('/').pop(); // Suggest a filename for download
+                a.href = documents;
+                a.textContent = documents.split('/').pop();
+                a.download = documents.split('/').pop();
                 documentsCell.appendChild(a);
             }
         }
-
-        newRow.insertCell(26).innerText = entry["System status"] || "";
-        newRow.insertCell(27).innerText = entry["Stock status"] || "";
-        newRow.insertCell(28).innerText = entry["Remedial work"] || "";
-        newRow.insertCell(29).innerText = entry["Remedial work details"] || "";
-        newRow.insertCell(30).innerText = entry["Remedial work files"] || "";
-         // Add download links for additional file fields
-        const remedialWorkFilesCell = newRow.insertCell(30);
-        const remedialWorkFiles = entry["Remedial work files"];
-        if (remedialWorkFiles) {
-            if (Array.isArray(remedialWorkFiles)) {
-                remedialWorkFiles.forEach(file => {
-                    const a = document.createElement('a');
-                    a.href = file;  // Corrected: Use the URL directly
-                    a.textContent = file.split('/').pop(); // Corrected: Extract filename from URL
-                    a.download = file.split('/').pop(); // Suggest a filename for download
-                    remedialWorkFilesCell.appendChild(a);
-                    remedialWorkFilesCell.appendChild(document.createElement('br')); // Add a line break for multiple documents
-                });
-            } else {
-                const a = document.createElement('a');
-                a.href = remedialWorkFiles; // Corrected: Use the URL directly
-                a.textContent = remedialWorkFiles.split('/').pop(); // Corrected: Extract filename from URL
-                a.download = remedialWorkFiles.split('/').pop(); // Suggest a filename for download
-                remedialWorkFilesCell.appendChild(a);
-            }
-        }
-        newRow.insertCell(31).innerText = entry["Pre-order"] || "";
-        newRow.insertCell(32).innerText = entry["Launch date of pre-order"] || "";
-        newRow.insertCell(33).innerText = entry["Launch time of pre-order"] || "";
-        newRow.insertCell(34).innerText = entry["Pre-order SKUs"] || "";
-        newRow.insertCell(35).innerText = entry["Further comments"] || "";
-    });
-}
 function highlightSearchResults(searchTerm, column) {
     const table = document.getElementById("logTable");
     const rows = table.getElementsByTagName("tr");
@@ -363,7 +110,6 @@ function highlightSearchResults(searchTerm, column) {
             const cell = cells[cellIndex];
             const text = cell.innerText;
 
-            // Reset background color
             cell.classList.remove('highlight');
 
             if (searchTerm && text.toLowerCase().includes(searchTerm.toLowerCase())) {
@@ -386,14 +132,12 @@ function getColumnIndex(columnName) {
 
     return -1; // Column not found
 }
-
 function filterTable() {
     const selectedColumn = document.getElementById("columnSelect").value;
     const searchTerm = document.getElementById("searchInput").value.toLowerCase();
 
     filteredSubmissions = allSubmissions.filter(entry => {
         if (!selectedColumn || selectedColumn === "") {
-            // If no column is selected, return all entries
             return true;
         }
 
@@ -429,7 +173,7 @@ function filterByDateRange(submissions) {
         });
     }
 
-     if (shipmentArrivalFrom) {
+    if (shipmentArrivalFrom) {
         filtered = filtered.filter(entry => {
             const arrivalDate = entry["Date of shipment arrival"] ? new Date(entry["Date of shipment arrival"]) : null;
             return arrivalDate && arrivalDate >= shipmentArrivalFrom;
@@ -445,8 +189,6 @@ function filterByDateRange(submissions) {
 
     return filtered;
 }
-
-
 function sortTable(column) {
     if (column === currentSortColumn) {
         currentSortDirection = currentSortDirection === 'asc' ? 'desc' : 'asc';
@@ -481,10 +223,9 @@ function downloadCSV() {
         const cells = Array.from(row.querySelectorAll('td'))
             .map(td => {
                 let text = td.innerText;
-                 // Check if the cell contains a link
                 const link = td.querySelector('a');
                 if (link) {
-                    text = link.href; // Use the link if it exists
+                    text = link.href;
                 }
                 return '"' + text.replace(/"/g, '""') + '"';
             });
@@ -504,40 +245,31 @@ function downloadCSV() {
 }
 
 function resetFilters() {
-    // Clear date pickers
     $('#submittedAtFrom').datepicker('setDate', null);
     $('#submittedAtTo').datepicker('setDate', null);
     $('#shipmentArrivalFrom').datepicker('setDate', null);
     $('#shipmentArrivalTo').datepicker('setDate', null);
 
-    // Clear search input and column selection
     document.getElementById("searchInput").value = "";
     document.getElementById("columnSelect").value = "";
 
-    // Reset filtered submissions to all submissions
     filteredSubmissions = [...allSubmissions];
 
-    // Re-render the table
     renderTable(filteredSubmissions);
 
-    // Remove highlights
     const table = document.getElementById("logTable");
     const cells = table.getElementsByTagName("td");
     for (let i = 0; i < cells.length; i++) {
         cells[i].classList.remove('highlight');
     }
 }
-
-// Attach event listeners after the functions are defined
 document.getElementById("searchButton").addEventListener("click", filterTable);
-document.getElementById("searchInput").addEventListener("keyup", function(event) {
-    // Trigger the button element with a click on the "Enter" key
+document.getElementById("searchInput").addEventListener("keyup", function (event) {
     if (event.key === "Enter") {
         filterTable();
     }
 });
 
-// Event listener for column sorting
 document.querySelectorAll('#logTable th').forEach(th => {
     th.addEventListener('click', () => {
         const column = th.dataset.column;
@@ -548,10 +280,9 @@ document.querySelectorAll('#logTable th').forEach(th => {
 document.getElementById("downloadCsvButton").addEventListener("click", downloadCSV);
 document.getElementById("resetButton").addEventListener("click", resetFilters);
 
-
-// Initial data fetch
 fetchSubmissions();
 </script>
 
 </body>
+
 </html>
