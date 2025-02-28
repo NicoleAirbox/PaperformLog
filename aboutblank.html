@@ -6,6 +6,8 @@
     <title>About Blank Submissions</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Datepicker CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -32,13 +34,28 @@
         /* Styles for the search bar */
         #searchBar {
             width: 300px;
-            margin: 20px auto;
+            margin: 10px auto; /* Reduced margin */
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
         }
         .highlight {
             background-color: lightgreen;
+        }
+        /* Styles for the date range pickers */
+        .date-range-container {
+            display: flex;
+            justify-content: center;
+            margin: 10px auto;
+        }
+        .date-range-container input {
+            width: 150px;
+            margin: 0 5px;
+        }
+        /* Smaller button style */
+        #downloadCsvButton {
+            padding: 5px 10px;
+            font-size: 0.8rem;
         }
     </style>
 </head>
@@ -47,8 +64,25 @@
     <div class="container">
         <h1>Live Submission Log</h1>
 
-        <!-- Search Bar -->
+        <!-- Search and Filter Section -->
         <div>
+            <!-- Date Range Filters for "Submitted At" -->
+            <div class="date-range-container">
+                <label for="submittedAtFrom">Submitted At From:</label>
+                <input type="text" id="submittedAtFrom" class="datepicker" placeholder="From Date">
+                <label for="submittedAtTo">To:</label>
+                <input type="text" id="submittedAtTo" class="datepicker" placeholder="To Date">
+            </div>
+
+            <!-- Date Range Filters for "Date of Shipment Arrival" -->
+            <div class="date-range-container">
+                <label for="shipmentArrivalFrom">Shipment Arrival From:</label>
+                <input type="text" id="shipmentArrivalFrom" class="datepicker" placeholder="From Date">
+                <label for="shipmentArrivalTo">To:</label>
+                <input type="text" id="shipmentArrivalTo" class="datepicker" placeholder="To Date">
+            </div>
+
+            <!-- Column Search -->
             <select id="columnSelect">
                 <option value="">Select Column</option>
                 <option value="timestamp">Submitted At</option>
@@ -90,7 +124,12 @@
             </select>
             <input type="text" id="searchInput" placeholder="Enter search term">
             <button id="searchButton">Go</button>
+            <!-- Reset Button -->
+            <button id="resetButton" class="btn btn-secondary">Reset</button>
         </div>
+
+        <!-- CSV Download Button -->
+        <button id="downloadCsvButton" class="btn btn-primary">Download as CSV</button>
 
         <div class="table-container">
             <table id="logTable" class="table table-bordered table-striped">
@@ -139,21 +178,29 @@
                 </tbody>
             </table>
         </div>
-         <!-- CSV Download Button -->
-         <button id="downloadCsvButton" class="btn btn-primary">Download as CSV</button>
+
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Datepicker JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 
     <script>
-                let allSubmissions = []; // Store all submissions
+        let allSubmissions = []; // Store all submissions
         let filteredSubmissions = []; // Store filtered submissions
         let currentSortColumn = 'timestamp'; // Default sort column
         let currentSortDirection = 'desc'; // Default sort direction (descending for "Submitted At")
 
+        // Datepicker initialization
+        $(document).ready(function() {
+            $('.datepicker').datepicker({
+                format: 'yyyy-mm-dd',
+                autoclose: true
+            });
+        });
         async function fetchSubmissions() {
             try {
                 const response = await fetch('aboutblank.json');
@@ -185,6 +232,7 @@
                 console.error("Error fetching submissions:", error);
             }
         }
+
         function renderTable(data) {
             const table = document.getElementById("logTable").getElementsByTagName('tbody')[0];
             table.innerHTML = "";
@@ -322,9 +370,51 @@
                 return cellValue.includes(searchTerm);
             });
 
+            filteredSubmissions = filterByDateRange(filteredSubmissions);
+
             renderTable(filteredSubmissions);
             highlightSearchResults(searchTerm, selectedColumn);
         }
+
+        function filterByDateRange(submissions) {
+            const submittedAtFrom = $('#submittedAtFrom').datepicker('getDate');
+            const submittedAtTo = $('#submittedAtTo').datepicker('getDate');
+            const shipmentArrivalFrom = $('#shipmentArrivalFrom').datepicker('getDate');
+            const shipmentArrivalTo = $('#shipmentArrivalTo').datepicker('getDate');
+
+            let filtered = [...submissions];
+
+            if (submittedAtFrom) {
+                filtered = filtered.filter(entry => {
+                    const timestamp = entry.timestamp ? new Date(entry.timestamp) : null;
+                    return timestamp && timestamp >= submittedAtFrom;
+                });
+            }
+
+            if (submittedAtTo) {
+                filtered = filtered.filter(entry => {
+                    const timestamp = entry.timestamp ? new Date(entry.timestamp) : null;
+                    return timestamp && timestamp <= submittedAtTo;
+                });
+            }
+
+             if (shipmentArrivalFrom) {
+                filtered = filtered.filter(entry => {
+                    const arrivalDate = entry["Date of shipment arrival"] ? new Date(entry["Date of shipment arrival"]) : null;
+                    return arrivalDate && arrivalDate >= shipmentArrivalFrom;
+                });
+            }
+
+            if (shipmentArrivalTo) {
+                filtered = filtered.filter(entry => {
+                    const arrivalDate = entry["Date of shipment arrival"] ? new Date(entry["Date of shipment arrival"]) : null;
+                    return arrivalDate && arrivalDate <= shipmentArrivalTo;
+                });
+            }
+
+            return filtered;
+        }
+
 
         function sortTable(column) {
             if (column === currentSortColumn) {
@@ -382,6 +472,31 @@
             URL.revokeObjectURL(url);
         }
 
+        function resetFilters() {
+            // Clear date pickers
+            $('#submittedAtFrom').datepicker('setDate', null);
+            $('#submittedAtTo').datepicker('setDate', null);
+            $('#shipmentArrivalFrom').datepicker('setDate', null);
+            $('#shipmentArrivalTo').datepicker('setDate', null);
+
+            // Clear search input and column selection
+            document.getElementById("searchInput").value = "";
+            document.getElementById("columnSelect").value = "";
+
+            // Reset filtered submissions to all submissions
+            filteredSubmissions = [...allSubmissions];
+
+            // Re-render the table
+            renderTable(filteredSubmissions);
+
+            // Remove highlights
+            const table = document.getElementById("logTable");
+            const cells = table.getElementsByTagName("td");
+            for (let i = 0; i < cells.length; i++) {
+                cells[i].classList.remove('highlight');
+            }
+        }
+
         // Attach event listeners after the functions are defined
         document.getElementById("searchButton").addEventListener("click", filterTable);
         document.getElementById("searchInput").addEventListener("keyup", function(event) {
@@ -400,6 +515,8 @@
         });
 
         document.getElementById("downloadCsvButton").addEventListener("click", downloadCSV);
+        document.getElementById("resetButton").addEventListener("click", resetFilters);
+
 
         // Initial data fetch
         fetchSubmissions();
