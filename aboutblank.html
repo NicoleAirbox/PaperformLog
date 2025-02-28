@@ -81,60 +81,61 @@
 
     <script>
         async function fetchSubmissions() {
-    try {
-        const response = await fetch('aboutblank.json'); // Changed URL here
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+            try {
+                const response = await fetch('aboutblank.json');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                const data = await response.json();
+                console.log("Fetched Data:", data); // Debugging - Inspect the data!
+
+                const table = document.getElementById("logTable").getElementsByTagName('tbody')[0];
+                table.innerHTML = ""; // Clear old data
+
+                data.forEach(entry => {
+                    const newRow = table.insertRow();
+                    newRow.insertCell(0).innerText = entry["timestamp"] ? new Date(entry["timestamp"]).toLocaleString() : ""; // Format timestamp
+                    newRow.insertCell(1).innerText = entry["Brand"] || "";
+                    newRow.insertCell(2).innerText = entry["Staff member"] || "";
+                    newRow.insertCell(3).innerText = entry["Supplier"] || "";
+                    newRow.insertCell(4).innerText = entry["Receiving warehouse"] || "";
+                    newRow.insertCell(5).innerText = entry["Shipment type"] || "";
+                    newRow.insertCell(6).innerText = entry["Haulier/Courier"] || "";
+                    newRow.insertCell(7).innerText = entry["Container type"] || "";
+                    newRow.insertCell(8).innerText = entry["Container unloading type"] || "";
+                    newRow.insertCell(9).innerText = entry["Tracking"] || "";
+                    newRow.insertCell(10).innerText = entry["Movement reference number (MRN)"] || "";
+                    newRow.insertCell(11).innerText = entry["MRN information"] || "";
+                    newRow.insertCell(12).innerText = entry["Domestic delivery"] || "";
+                    newRow.insertCell(13).innerText = entry["Date of shipment arrival"] || "";
+                    newRow.insertCell(14).innerText = entry["Date of product launch"] || "";
+                    newRow.insertCell(15).innerText = entry["Unit quantity"] || "";
+                    newRow.insertCell(16).innerText = entry["Carton quantity"] || "";
+                    newRow.insertCell(17).innerText = entry["Pallet quantity"] || "";
+                    newRow.insertCell(18).innerText = entry["Allocation type"] || "";
+                    newRow.insertCell(19).innerText = entry["Mixed shipment"] || "";
+                    newRow.insertCell(20).innerText = entry["ASN ID number(s)"] || "";
+                    newRow.insertCell(21).innerText = entry["Stock movement"] || "";
+                    newRow.insertCell(22).innerText = entry["Prepacks ASN file"] || "";
+                    newRow.insertCell(23).innerText = entry["Packing list name"] || "";
+                    newRow.insertCell(24).innerText = entry["Outer labels"] || "";
+                    newRow.insertCell(25).innerText = entry["Documents"] || "";
+                    newRow.insertCell(26).innerText = entry["System status"] || "";
+                    newRow.insertCell(27).innerText = entry["Stock status"] || "";
+                    newRow.insertCell(28).innerText = entry["Remedial work"] || "";
+                    newRow.insertCell(29).innerText = entry["Remedial work details"] || "";
+                    newRow.insertCell(30).innerText = entry["Remedial work files"] || "";
+                    newRow.insertCell(31).innerText = entry["Pre-order"] || "";
+                    newRow.insertCell(32).innerText = entry["Launch date of pre-order"] || "";
+                    newRow.insertCell(33).innerText = entry["Launch time of pre-order"] || "";
+                    newRow.insertCell(34).innerText = entry["Pre-order SKUs"] || "";
+                    newRow.insertCell(35).innerText = entry["Further comments"] || "";
+                });
+            } catch (error) {
+                console.error("Error fetching submissions:", error);
+            }
         }
-        const data = await response.json();
-        console.log("Fetched Data:", data); // Debugging - Inspect the data!
 
-        const table = document.getElementById("logTable").getElementsByTagName('tbody')[0];
-        table.innerHTML = ""; // Clear old data
-
-        data.forEach(entry => {
-            const newRow = table.insertRow();
-            newRow.insertCell(0).innerText = entry["timestamp"] ? new Date(entry["timestamp"]).toLocaleString() : "N/A"; // Format timestamp
-            newRow.insertCell(1).innerText = entry["Brand"] || "N/A";
-            newRow.insertCell(2).innerText = entry["Staff member"] || "N/A";
-            newRow.insertCell(3).innerText = entry["Supplier"] || "N/A";
-            newRow.insertCell(4).innerText = entry["Receiving warehouse"] || "N/A";
-            newRow.insertCell(5).innerText = entry["Shipment type"] || "N/A";
-            newRow.insertCell(6).innerText = entry["Haulier/Courier"] || "N/A";
-            newRow.insertCell(7).innerText = entry["Container type"] || "N/A";
-            newRow.insertCell(8).innerText = entry["Container unloading type"] || "N/A";
-            newRow.insertCell(9).innerText = entry["Tracking"] || "N/A";
-            newRow.insertCell(10).innerText = entry["Movement reference number (MRN)"] || "N/A";
-            newRow.insertCell(11).innerText = entry["MRN information"] || "N/A";
-            newRow.insertCell(12).innerText = entry["Domestic delivery"] || "N/A";
-            newRow.insertCell(13).innerText = entry["Date of shipment arrival"] || "N/A";
-            newRow.insertCell(14).innerText = entry["Date of product launch"] || "N/A";
-            newRow.insertCell(15).innerText = entry["Unit quantity"] || "N/A";
-            newRow.insertCell(16).innerText = entry["Carton quantity"] || "N/A";
-            newRow.insertCell(17).innerText = entry["Pallet quantity"] || "N/A";
-            newRow.insertCell(18).innerText = entry["Allocation type"] || "N/A";
-            newRow.insertCell(19).innerText = entry["Mixed shipment"] || "N/A";
-            newRow.insertCell(20).innerText = entry["ASN ID number(s)"] || "N/A";
-            newRow.insertCell(21).innerText = entry["Stock movement"] || "N/A";
-            newRow.insertCell(22).innerText = entry["Prepacks ASN file"] || "N/A";
-            newRow.insertCell(23).innerText = entry["Packing list name"] || "N/A";
-            newRow.insertCell(24).innerText = entry["Outer labels"] || "N/A";
-            newRow.insertCell(25).innerText = entry["Documents"] || "N/A";
-            newRow.insertCell(26).innerText = entry["System status"] || "N/A";
-            newRow.insertCell(27).innerText = entry["Stock status"] || "N/A";
-            newRow.insertCell(28).innerText = entry["Remedial work"] || "N/A";
-            newRow.insertCell(29).innerText = entry["Remedial work details"] || "N/A";
-            newRow.insertCell(30).innerText = entry["Remedial work files"] || "N/A";
-            newRow.insertCell(31).innerText = entry["Pre-order"] || "N/A";
-            newRow.insertCell(32).innerText = entry["Launch date of pre-order"] || "N/A";
-            newRow.insertCell(33).innerText = entry["Launch time of pre-order"] || "N/A";
-            newRow.insertCell(34).innerText = entry["Pre-order SKUs"] || "N/A";
-            newRow.insertCell(35).innerText = entry["Further comments"] || "N/A";
-        });
-    } catch (error) {
-        console.error("Error fetching submissions:", error);
-    }
-}
         // Run on page load
         fetchSubmissions();
         setInterval(fetchSubmissions, 5000);
