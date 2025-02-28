@@ -28,7 +28,7 @@ async function fetchPaperformSubmissions() {
             return [];
         }
     
-        return response.data.data;
+        return response.data.results.submissions; // CORRECTED LINE
     } catch (error) {
         console.error('Error fetching data from Paperform:', error);
         return [];
@@ -109,3 +109,9 @@ async function updateSubmissions() {
         console.error("Error in updateSubmissions:", error);
     }
 }
+
+async function main() {
+    await updateSubmissions();
+}
+
+main();
