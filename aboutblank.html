@@ -37,6 +37,9 @@
             border: 1px solid #ccc;
             border-radius: 5px;
         }
+        .highlight {
+            background-color: lightgreen;
+        }
     </style>
 </head>
 <body>
@@ -45,7 +48,49 @@
         <h1>Live Submission Log</h1>
 
         <!-- Search Bar -->
-        <input type="text" id="searchBar" placeholder="Search submissions...">
+        <div>
+            <select id="columnSelect">
+                <option value="">Select Column</option>
+                <option value="timestamp">Submitted At</option>
+                <option value="Brand">Brand</option>
+                <option value="Staff member">Staff member</option>
+                <option value="Supplier">Supplier</option>
+                <option value="Receiving warehouse">Receiving warehouse</option>
+                <option value="Shipment type">Shipment type</option>
+                <option value="Haulier/Courier">Haulier/Courier</option>
+                <option value="Container type">Container type</option>
+                <option value="Container unloading type">Container unloading type</option>
+                <option value="Tracking">Tracking</option>
+                <option value="Movement reference number (MRN)">Movement reference number (MRN)</option>
+                <option value="MRN information">MRN information</option>
+                <option value="Domestic delivery">Domestic delivery</option>
+                <option value="Date of shipment arrival">Date of shipment arrival</option>
+                <option value="Date of product launch">Date of product launch</option>
+                <option value="Unit quantity">Unit quantity</option>
+                <option value="Carton quantity">Carton quantity</option>
+                <option value="Pallet quantity">Pallet quantity</option>
+                <option value="Allocation type">Allocation type</option>
+                <option value="Mixed shipment">Mixed shipment</option>
+                <option value="ASN ID number(s)">ASN ID number(s)</option>
+                <option value="Stock movement">Stock movement</option>
+                <option value="Prepacks ASN file">Prepacks ASN file</option>
+                <option value="Packing list name">Packing list name</option>
+                <option value="Outer labels">Outer labels</option>
+                <option value="Documents">Documents</option>
+                <option value="System status">System status</option>
+                <option value="Stock status">Stock status</option>
+                <option value="Remedial work">Remedial work</option>
+                <option value="Remedial work details">Remedial work details</option>
+                <option value="Remedial work files">Remedial work files</option>
+                <option value="Pre-order">Pre-order</option>
+                <option value="Launch date of pre-order">Launch date of pre-order</option>
+                <option value="Launch time of pre-order">Launch time of pre-order</option>
+                <option value="Pre-order SKUs">Pre-order SKUs</option>
+                <option value="Further comments">Further comments</option>
+            </select>
+            <input type="text" id="searchInput" placeholder="Enter search term">
+            <button id="searchButton">Go</button>
+        </div>
 
         <div class="table-container">
             <table id="logTable" class="table table-bordered table-striped">
@@ -94,16 +139,20 @@
                 </tbody>
             </table>
         </div>
+         <!-- CSV Download Button -->
+         <button id="downloadCsvButton" class="btn btn-primary">Download as CSV</button>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 
     <script>
-        let allSubmissions = []; // Store all submissions
-        let currentSortColumn = null;
-        let currentSortDirection = 'asc';
+                let allSubmissions = []; // Store all submissions
+        let filteredSubmissions = []; // Store filtered submissions
+        let currentSortColumn = 'timestamp'; // Default sort column
+        let currentSortDirection = 'desc'; // Default sort direction (descending for "Submitted At")
 
         async function fetchSubmissions() {
             try {
@@ -126,20 +175,23 @@
                     return; // Exit if the file is empty
                 }
 
+                // Sort by "Submitted At" in descending order (most recent first)
+                data.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
                 allSubmissions = data; // Store all submissions
-                renderTable(data);
+                filteredSubmissions = [...allSubmissions]; // Initially, filtered submissions are all submissions
+                renderTable(filteredSubmissions);
             } catch (error) {
                 console.error("Error fetching submissions:", error);
             }
         }
-
         function renderTable(data) {
             const table = document.getElementById("logTable").getElementsByTagName('tbody')[0];
             table.innerHTML = "";
 
             data.forEach(entry => {
                 const newRow = table.insertRow();
-                newRow.insertCell(0).innerText = entry["timestamp"] ? new Date(entry["timestamp"]).toLocaleString() : "";
+                newRow.insertCell(0).innerHTML = entry["timestamp"] ? moment(entry["timestamp"]).format('YYYY-MM-DD HH:mm:ss') : "";
                 newRow.insertCell(1).innerText = entry["Brand"] || "";
                 newRow.insertCell(2).innerText = entry["Staff member"] || "";
                 newRow.insertCell(3).innerText = entry["Supplier"] || "";
@@ -172,17 +224,17 @@
                     if (Array.isArray(documents)) {
                         documents.forEach(doc => {
                             const a = document.createElement('a');
-                            a.href = doc.url;
-                            a.textContent = doc.name;
-                            a.download = doc.name; // Suggest a filename for download
+                            a.href = doc;  // Corrected: Use the URL directly
+                            a.textContent = doc.split('/').pop(); // Corrected: Extract filename from URL
+                            a.download = doc.split('/').pop(); // Suggest a filename for download
                             documentsCell.appendChild(a);
                             documentsCell.appendChild(document.createElement('br')); // Add a line break for multiple documents
                         });
                     } else {
                         const a = document.createElement('a');
-                        a.href = documents;
-                        a.textContent = documents;
-                        a.download = documents; // Suggest a filename for download
+                        a.href = documents; // Corrected: Use the URL directly
+                        a.textContent = documents.split('/').pop(); // Corrected: Extract filename from URL
+                        a.download = documents.split('/').pop(); // Suggest a filename for download
                         documentsCell.appendChild(a);
                     }
                 }
@@ -192,12 +244,86 @@
                 newRow.insertCell(28).innerText = entry["Remedial work"] || "";
                 newRow.insertCell(29).innerText = entry["Remedial work details"] || "";
                 newRow.insertCell(30).innerText = entry["Remedial work files"] || "";
+                 // Add download links for additional file fields
+                const remedialWorkFilesCell = newRow.insertCell(30);
+                const remedialWorkFiles = entry["Remedial work files"];
+                if (remedialWorkFiles) {
+                    if (Array.isArray(remedialWorkFiles)) {
+                        remedialWorkFiles.forEach(file => {
+                            const a = document.createElement('a');
+                            a.href = file;  // Corrected: Use the URL directly
+                            a.textContent = file.split('/').pop(); // Corrected: Extract filename from URL
+                            a.download = file.split('/').pop(); // Suggest a filename for download
+                            remedialWorkFilesCell.appendChild(a);
+                            remedialWorkFilesCell.appendChild(document.createElement('br')); // Add a line break for multiple documents
+                        });
+                    } else {
+                        const a = document.createElement('a');
+                        a.href = remedialWorkFiles; // Corrected: Use the URL directly
+                        a.textContent = remedialWorkFiles.split('/').pop(); // Corrected: Extract filename from URL
+                        a.download = remedialWorkFiles.split('/').pop(); // Suggest a filename for download
+                        remedialWorkFilesCell.appendChild(a);
+                    }
+                }
                 newRow.insertCell(31).innerText = entry["Pre-order"] || "";
                 newRow.insertCell(32).innerText = entry["Launch date of pre-order"] || "";
                 newRow.insertCell(33).innerText = entry["Launch time of pre-order"] || "";
                 newRow.insertCell(34).innerText = entry["Pre-order SKUs"] || "";
                 newRow.insertCell(35).innerText = entry["Further comments"] || "";
             });
+        }
+        function highlightSearchResults(searchTerm, column) {
+            const table = document.getElementById("logTable");
+            const rows = table.getElementsByTagName("tr");
+
+            for (let i = 1; i < rows.length; i++) { // Start from 1 to skip header row
+                const cells = rows[i].getElementsByTagName("td");
+                const cellIndex = getColumnIndex(column);
+
+                if (cellIndex !== -1 && cells[cellIndex]) {
+                    const cell = cells[cellIndex];
+                    const text = cell.innerText;
+
+                    // Reset background color
+                    cell.classList.remove('highlight');
+
+                    if (searchTerm && text.toLowerCase().includes(searchTerm.toLowerCase())) {
+                        cell.classList.add('highlight');
+                    }
+                }
+            }
+        }
+
+        function getColumnIndex(columnName) {
+            const table = document.getElementById("logTable");
+            const headerRow = table.getElementsByTagName("tr")[0];
+            const headers = headerRow.getElementsByTagName("th");
+
+            for (let i = 0; i < headers.length; i++) {
+                if (headers[i].dataset.column === columnName) {
+                    return i;
+                }
+            }
+
+            return -1; // Column not found
+        }
+
+        function filterTable() {
+            const selectedColumn = document.getElementById("columnSelect").value;
+            const searchTerm = document.getElementById("searchInput").value.toLowerCase();
+
+            filteredSubmissions = allSubmissions.filter(entry => {
+                if (!selectedColumn || selectedColumn === "") {
+                    // If no column is selected, return all entries
+                    return true;
+                }
+
+                const cellValue = entry[selectedColumn] ? entry[selectedColumn].toString().toLowerCase() : "";
+                return cellValue.includes(searchTerm);
+            });
+
+            renderTable(filteredSubmissions);
+            highlightSearchResults(searchTerm, selectedColumn);
         }
 
         function sortTable(column) {
@@ -208,7 +334,7 @@
                 currentSortDirection = 'asc';
             }
 
-            const sortedData = [...allSubmissions].sort((a, b) => {
+            const sortedData = [...filteredSubmissions].sort((a, b) => {
                 const valueA = a[column] || '';
                 const valueB = b[column] || '';
 
@@ -223,33 +349,60 @@
 
             renderTable(sortedData);
         }
+        function downloadCSV() {
+            const csvRows = [];
+            const headers = Array.from(document.querySelectorAll('#logTable th'))
+                .map(th => th.innerText);
+            csvRows.push(headers.join(','));
 
-        function searchTable() {
-            const searchTerm = document.getElementById('searchBar').value.toLowerCase();
-            const filteredData = allSubmissions.filter(entry => {
-                for (const key in entry) {
-                    if (entry[key] && entry[key].toString().toLowerCase().includes(searchTerm)) {
-                        return true;
-                    }
-                }
-                return false;
+            const tableRows = document.querySelectorAll('#logTable tbody tr');
+            tableRows.forEach(row => {
+                const cells = Array.from(row.querySelectorAll('td'))
+                    .map(td => {
+                        let text = td.innerText;
+                         // Check if the cell contains a link
+                        const link = td.querySelector('a');
+                        if (link) {
+                            text = link.href; // Use the link if it exists
+                        }
+                        return '"' + text.replace(/"/g, '""') + '"';
+                    });
+                csvRows.push(cells.join(','));
             });
-            renderTable(filteredData);
+
+            const csvString = csvRows.join('\n');
+            const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'submission_log.csv';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
         }
 
-        // Event listeners
-        document.getElementById('searchBar').addEventListener('input', searchTable);
+        // Attach event listeners after the functions are defined
+        document.getElementById("searchButton").addEventListener("click", filterTable);
+        document.getElementById("searchInput").addEventListener("keyup", function(event) {
+            // Trigger the button element with a click on the "Enter" key
+            if (event.key === "Enter") {
+                filterTable();
+            }
+        });
 
-        // Add click event listeners to table headers for sorting
-        document.querySelectorAll('th[data-column]').forEach(header => {
-            header.addEventListener('click', () => {
-                sortTable(header.dataset.column);
+        // Event listener for column sorting
+        document.querySelectorAll('#logTable th').forEach(th => {
+            th.addEventListener('click', () => {
+                const column = th.dataset.column;
+                sortTable(column);
             });
         });
 
-        // Run on page load
+        document.getElementById("downloadCsvButton").addEventListener("click", downloadCSV);
+
+        // Initial data fetch
         fetchSubmissions();
-        setInterval(fetchSubmissions, 5000);
     </script>
 
 </body>
