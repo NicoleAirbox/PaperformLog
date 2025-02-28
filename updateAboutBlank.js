@@ -1,3 +1,41 @@
+require('dotenv').config({ path: '.env' }); // Specify the path to .env
+console.log("API Key:", process.env.PAPERFORM_API_KEY); // Add this line for debugging
+const fs = require('fs');
+const axios = require('axios');
+
+// Environment variables (safer than hardcoding)
+const PAPERFORM_API_KEY = process.env.PAPERFORM_API_KEY;
+const FORM_ID = 'aboutblank';
+const JSON_FILE_PATH = 'aboutblank.json';
+
+// Function to fetch latest submissions from Paperform
+async function fetchPaperformSubmissions() {
+    try {
+        if (!PAPERFORM_API_KEY) {
+            throw new Error("Paperform API key is missing.  Make sure it's set in your environment variables.");
+        }
+
+        const response = await axios.get(`https://api.paperform.co/v1/forms/${FORM_ID}/submissions?limit=100`, {
+            headers: {
+                Authorization: `Bearer ${PAPERFORM_API_KEY}`,
+            },
+        });
+
+        console.log("Raw API Response:", JSON.stringify(response.data, null, 2));
+
+        if (!response.data || !response.data.results || !response.data.results.submissions) {
+            console.error("Unexpected API response structure:", response.data);
+            return [];
+        }
+    
+        return response.data.data;
+    } catch (error) {
+        console.error('Error fetching data from Paperform:', error);
+        return [];
+    }
+}
+
+// Function to update JSON file
 async function updateSubmissions() {
     try {
         const submissions = await fetchPaperformSubmissions();
