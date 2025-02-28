@@ -48,16 +48,16 @@ async function updateSubmissions() {
         console.log("Processed Submissions:", JSON.stringify(submissions, null, 2));
 
         //Comment out the below lines for now
-        // let existingData = [];
-        // if (fs.existsSync(JSON_FILE_PATH)) {
-        //     try {
-        //         const fileContent = fs.readFileSync(JSON_FILE_PATH, 'utf8');
-        //         existingData = fileContent ? JSON.parse(fileContent) : [];
-        //     } catch (parseError) {
-        //         console.error("Error parsing existing JSON file:", parseError);
-        //         existingData = []; // Reset to avoid issues with corrupted data
-        //     }
-        // }
+        let existingData = [];
+        if (fs.existsSync(JSON_FILE_PATH)) {
+            try {
+                const fileContent = fs.readFileSync(JSON_FILE_PATH, 'utf8');
+                existingData = fileContent ? JSON.parse(fileContent) : [];
+            } catch (parseError) {
+                console.error("Error parsing existing JSON file:", parseError);
+                existingData = []; // Reset to avoid issues with corrupted data
+            }
+        }
 
         // Format new submissions and add them to existing data
         const formattedSubmissions = submissions.map(sub => ({
@@ -100,7 +100,7 @@ async function updateSubmissions() {
         }));
 
         //Change this line to only include the formatted submissions
-        const updatedData = [...formattedSubmissions];
+        const updatedData = [...existingData, ...formattedSubmissions];
 
         fs.writeFileSync(JSON_FILE_PATH, JSON.stringify(updatedData, null, 2), 'utf8');
         console.log("New submission added successfully!");
