@@ -81,60 +81,42 @@
 
     <script>
         async function fetchSubmissions() {
-            try {
-                const response = await fetch('aboutblank.json');
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                const data = await response.json();
-                console.log("Fetched Data:", data); // Debugging - Inspect the data!
-
-                const table = document.getElementById("logTable").getElementsByTagName('tbody')[0];
-                table.innerHTML = ""; // Clear old data
-
-                data.forEach(entry => {
-                    const newRow = table.insertRow();
-                    newRow.insertCell(0).innerText = entry["timestamp"] ? new Date(entry["timestamp"]).toLocaleString() : ""; // Format timestamp
-                    newRow.insertCell(1).innerText = entry["Brand"] || "";
-                    newRow.insertCell(2).innerText = entry["Staff member"] || "";
-                    newRow.insertCell(3).innerText = entry["Supplier"] || "";
-                    newRow.insertCell(4).innerText = entry["Receiving warehouse"] || "";
-                    newRow.insertCell(5).innerText = entry["Shipment type"] || "";
-                    newRow.insertCell(6).innerText = entry["Haulier/Courier"] || "";
-                    newRow.insertCell(7).innerText = entry["Container type"] || "";
-                    newRow.insertCell(8).innerText = entry["Container unloading type"] || "";
-                    newRow.insertCell(9).innerText = entry["Tracking"] || "";
-                    newRow.insertCell(10).innerText = entry["Movement reference number (MRN)"] || "";
-                    newRow.insertCell(11).innerText = entry["MRN information"] || "";
-                    newRow.insertCell(12).innerText = entry["Domestic delivery"] || "";
-                    newRow.insertCell(13).innerText = entry["Date of shipment arrival"] || "";
-                    newRow.insertCell(14).innerText = entry["Date of product launch"] || "";
-                    newRow.insertCell(15).innerText = entry["Unit quantity"] || "";
-                    newRow.insertCell(16).innerText = entry["Carton quantity"] || "";
-                    newRow.insertCell(17).innerText = entry["Pallet quantity"] || "";
-                    newRow.insertCell(18).innerText = entry["Allocation type"] || "";
-                    newRow.insertCell(19).innerText = entry["Mixed shipment"] || "";
-                    newRow.insertCell(20).innerText = entry["ASN ID number(s)"] || "";
-                    newRow.insertCell(21).innerText = entry["Stock movement"] || "";
-                    newRow.insertCell(22).innerText = entry["Prepacks ASN file"] || "";
-                    newRow.insertCell(23).innerText = entry["Packing list name"] || "";
-                    newRow.insertCell(24).innerText = entry["Outer labels"] || "";
-                    newRow.insertCell(25).innerText = entry["Documents"] || "";
-                    newRow.insertCell(26).innerText = entry["System status"] || "";
-                    newRow.insertCell(27).innerText = entry["Stock status"] || "";
-                    newRow.insertCell(28).innerText = entry["Remedial work"] || "";
-                    newRow.insertCell(29).innerText = entry["Remedial work details"] || "";
-                    newRow.insertCell(30).innerText = entry["Remedial work files"] || "";
-                    newRow.insertCell(31).innerText = entry["Pre-order"] || "";
-                    newRow.insertCell(32).innerText = entry["Launch date of pre-order"] || "";
-                    newRow.insertCell(33).innerText = entry["Launch time of pre-order"] || "";
-                    newRow.insertCell(34).innerText = entry["Pre-order SKUs"] || "";
-                    newRow.insertCell(35).innerText = entry["Further comments"] || "";
-                });
-            } catch (error) {
-                console.error("Error fetching submissions:", error);
-            }
+    try {
+        const response = await fetch('aboutblank.json');
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
         }
+        const text = await response.text(); // Get the response as text
+        let data = [];
+
+        if (text) { // Check if the response is not empty
+            try {
+                data = JSON.parse(text); // Try to parse it as JSON
+            } catch (e) {
+                console.error("Error parsing JSON:", e);
+                return; // Exit if parsing fails
+            }
+        } else {
+            console.log("aboutblank.json is empty.");
+            return; // Exit if the file is empty
+        }
+
+        console.log("Fetched Data:", data);
+
+        const table = document.getElementById("logTable").getElementsByTagName('tbody')[0];
+        table.innerHTML = "";
+
+        data.forEach(entry => {
+            const newRow = table.insertRow();
+            newRow.insertCell(0).innerText = entry["timestamp"] ? new Date(entry["timestamp"]).toLocaleString() : "";
+            newRow.insertCell(1).innerText = entry["Brand"] || "";
+            newRow.insertCell(2).innerText = entry["Staff member"] || "";
+            // ... (rest of your code for populating the table)
+        });
+    } catch (error) {
+        console.error("Error fetching submissions:", error);
+    }
+}
 
         // Run on page load
         fetchSubmissions();

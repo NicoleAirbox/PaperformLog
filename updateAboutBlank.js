@@ -1,3 +1,4 @@
+require('dotenv').config({ path: '.env' }); // Specify the path to .env
 const fs = require('fs');
 const axios = require('axios');
 require('dotenv').config(); // Load environment variables from .env file (if using locally)
