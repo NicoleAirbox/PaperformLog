@@ -345,9 +345,9 @@
             newRow.insertCell(27).innerText = entry["Stock status"] || "";
             newRow.insertCell(28).innerText = entry["Remedial work"] || "";
             newRow.insertCell(29).innerText = entry["Remedial work details"] || "";
-            newRow.insertCell(30).innerText = entry["Remedial work files"] || "";
+            //newRow.insertCell(30).innerText = entry["Remedial work files"] || "";
              // Add download links for additional file fields
-            const remedialWorkFilesCell = newRow.insertCell(30);
+             const remedialWorkFilesCell = newRow.insertCell(30);
             const remedialWorkFiles = entry["Remedial work files"];
             if (remedialWorkFiles) {
                 if (Array.isArray(remedialWorkFiles)) {
