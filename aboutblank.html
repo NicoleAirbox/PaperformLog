@@ -19,13 +19,13 @@
             margin: auto;
         }
         h1 {
-            text-align: center; /* Center the title */
+            text-align: center;
             margin-bottom: 30px;
         }
         .date-range-container {
             display: inline-block;
             margin-right: 20px;
-            margin-bottom: 10px; /* Add some spacing below the date ranges */
+            margin-bottom: 10px;
         }
         label {
             margin-right: 5px;
@@ -67,23 +67,57 @@
             border-collapse: collapse;
         }
         th, td {
-            border: 1px solid #ddd; /* Add borders to table cells */
+            border: 1px solid #ddd;
             padding: 8px;
             text-align: left;
         }
         th {
             background-color: #f2f2f2;
+            text-align: center; /* Center the header text */
         }
         tr:nth-child(even) {
             background-color: #f9f9f9;
         }
         .highlight {
-            background-color: rgba(0, 255, 64, 0.674);
+            background-color: yellow;
         }
-        /* Style for the filter and search section */
-        div > div {
-            margin-bottom: 10px;
-        }
+        /* Adjust column widths */
+        th[data-column="timestamp"], td:nth-child(1) { width: 120px; }
+        th[data-column="Brand"], td:nth-child(2) { width: 80px; }
+        th[data-column="Staff member"], td:nth-child(3) { width: 100px; }
+        th[data-column="Supplier"], td:nth-child(4) { width: 80px; }
+        th[data-column="Receiving warehouse"], td:nth-child(5) { width: 120px; }
+        th[data-column="Shipment type"], td:nth-child(6) { width: 100px; }
+        th[data-column="Haulier/Courier"], td:nth-child(7) { width: 100px; }
+        th[data-column="Container type"], td:nth-child(8) { width: 80px; }
+         th[data-column="Container unloading type"], td:nth-child(9) { width: 130px; }
+        th[data-column="Tracking"], td:nth-child(10) { width: 80px; }
+        th[data-column="Movement reference number (MRN)"], td:nth-child(11) { width: 150px; }
+        th[data-column="MRN information"], td:nth-child(12) { width: 120px; }
+        th[data-column="Domestic delivery"], td:nth-child(13) { width: 80px; }
+        th[data-column="Date of shipment arrival"], td:nth-child(14) { width: 120px; }
+        th[data-column="Date of product launch"], td:nth-child(15) { width: 120px; }
+        th[data-column="Unit quantity"], td:nth-child(16) { width: 80px; }
+        th[data-column="Carton quantity"], td:nth-child(17) { width: 80px; }
+        th[data-column="Pallet quantity"], td:nth-child(18) { width: 80px; }
+        th[data-column="Allocation type"], td:nth-child(19) { width: 100px; }
+        th[data-column="Mixed shipment"], td:nth-child(20) { width: 80px; }
+        th[data-column="ASN ID number(s)"], td:nth-child(21) { width: 120px; }
+        th[data-column="Stock movement"], td:nth-child(22) { width: 100px; }
+        th[data-column="Prepacks ASN file"], td:nth-child(23) { width: 120px; }
+        th[data-column="Packing list name"], td:nth-child(24) { width: 120px; }
+        th[data-column="Outer labels"], td:nth-child(25) { width: 120px; }
+        th[data-column="Documents"], td:nth-child(26) { width: 120px; }
+        th[data-column="System status"], td:nth-child(27) { width: 100px; }
+        th[data-column="Stock status"], td:nth-child(28) { width: 100px; }
+        th[data-column="Remedial work"], td:nth-child(29) { width: 100px; }
+        th[data-column="Remedial work details"], td:nth-child(30) { width: 120px; }
+        th[data-column="Remedial work files"], td:nth-child(31) { width: 120px; }
+        th[data-column="Pre-order"], td:nth-child(32) { width: 80px; }
+        th[data-column="Launch date of pre-order"], td:nth-child(33) { width: 120px; }
+        th[data-column="Launch time of pre-order"], td:nth-child(34) { width: 120px; }
+        th[data-column="Pre-order SKUs"], td:nth-child(35) { width: 120px; }
+        th[data-column="Further comments"], td:nth-child(36) { width: 120px; }
     </style>
 </head>
 <body>
