@@ -138,24 +138,24 @@
 <div class="container">
     <h1>Live Submission Log</h1>
 
-        <!-- Search and Filter Section -->
-        <div>
-            <!-- Date Range Filters for "Submitted At" -->
-            <div class="date-range-container">
-                <label for="submittedAtFrom">Submitted At From:</label>
-                <input type="text" id="submittedAtFrom" class="datepicker" placeholder="From Date">
-                <label for="submittedAtTo">To:</label>
-                <input type="text" id="submittedAtTo" class="datepicker" placeholder="To Date">
-            </div>
-    
-            <!-- Date Range Filters for "Date of Shipment Arrival" -->
-            <div class="date-range-container">
-                <label for="shipmentArrivalFrom">Shipment Arrival From:</label>
-                <input type="text" id="shipmentArrivalFrom" class="datepicker" placeholder="From Date">
-                <label for="shipmentArrivalTo">To:</label>
-                <input type="text" id="shipmentArrivalTo" class="datepicker" placeholder="To Date">
-            </div>
-    
+    <!-- Search and Filter Section -->
+    <div>
+        <!-- Date Range Filters for "Submitted At" -->
+        <div class="date-range-container">
+            <label for="submittedAtFrom">Submitted At From:</label>
+            <input type="text" id="submittedAtFrom" class="datepicker" placeholder="From Date">
+            <label for="submittedAtTo">To:</label>
+            <input type="text" id="submittedAtTo" class="datepicker" placeholder="To Date">
+        </div>
+
+        <!-- Date Range Filters for "Date of Shipment Arrival" -->
+        <div class="date-range-container">
+            <label for="shipmentArrivalFrom">Shipment Arrival From:</label>
+            <input type="text" id="shipmentArrivalFrom" class="datepicker" placeholder="From Date">
+            <label for="shipmentArrivalTo">To:</label>
+            <input type="text" id="shipmentArrivalTo" class="datepicker" placeholder="To Date">
+        </div>
+
         <!-- Add margin-bottom to create space -->
         <div style="clear: both; margin-bottom: 10px;">
             <select id="columnSelect">
@@ -170,19 +170,19 @@
                 <option value="Container type">Container type</option>
                 <option value="Container unloading type">Container unloading type</option>
                 <option value="Tracking">Tracking</option>
-                <option value="Movement reference number (MRN)">Movement reference number (MRN)</option>
-                <option value="MRN information">MRN information</option>
+                <option value="Movement reference number (MRN)">Movement reference number (MRN)</Movement reference number (MRN)>
+                <option value="MRN information">MRN information</MRN information>
                 <option value="Domestic delivery">Domestic delivery</Domestic delivery>
-                <option value="Date of shipment arrival">Date of shipment arrival</option>
-                <option value="Date of product launch">Date of product launch</option>
-                <option value="Unit quantity">Unit quantity</option>
-                <option value="Carton quantity">Carton quantity</option>
-                <option value="Pallet quantity">Pallet quantity</option>
+                <option value="Date of shipment arrival">Date of shipment arrival</Date of shipment arrival>
+                <option value="Date of product launch">Date of product launch</Date of product launch>
+                <option value="Unit quantity">Unit quantity</Unit quantity>
+                <option value="Carton quantity">Carton quantity</Carton quantity>
+                <option value="Pallet quantity">Pallet quantity</Pallet quantity>
                 <option value="Allocation type">Allocation type</Allocation type>
                 <option value="Mixed shipment">Mixed shipment</Mixed shipment>
-                <option value="ASN ID number(s)">ASN ID number(s)</option>
+                <option value="ASN ID number(s)">ASN ID number(s)</ASN ID number(s)>
                 <option value="Stock movement">Stock movement</Stock movement>
-                <option value="Prepacks ASN file">Prepacks ASN file</option>
+                <option value="Prepacks ASN file">Prepacks ASN file</Prepacks ASN file>
                 <option value="Packing list name">Packing list name</Packing list name>
                 <option value="Outer labels">Outer labels</Outer labels>
                 <option value="Documents">Documents</Documents>
@@ -200,12 +200,14 @@
         </div>
 
         <!-- Input and button on the same line -->
-        <div style="display: inline-block;">
-            <input type="text" id="searchInput" placeholder="Enter search term" style="margin-right: 5px;">
-            <button id="searchButton">Go</button>
+       <div style="display: flex; align-items: center; margin-bottom: 10px;">
+            <input type="text" id="searchInput" placeholder="Enter search term">
+            <button id="searchButton" style="margin-left: 5px;">Go</button>
         </div>
-        <!-- Reset Button -->
-        <button id="resetButton" class="btn btn-secondary">Reset</button>
+
+        <div style="display: flex; align-items: center;">
+           <button id="resetButton" class="btn btn-secondary" style="margin-right: 5px;">Reset</button>
+           <button id="downloadButton" class="btn btn-primary">Download as CSV</button>
         </div>
     <!-- CSV Download Button -->
     <button id="downloadCsvButton" class="btn btn-primary">Download as CSV</button>
