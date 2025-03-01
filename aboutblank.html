@@ -140,9 +140,9 @@
 
     <!-- Search and Filter Section -->
     <div>
-        <!-- Date Range Filters for "Submitted At" -->
+        <!-- Date Range Filters for "Submitted at" -->
         <div class="date-range-container">
-            <label for="submittedAtFrom">Submitted At:              x</label>
+            <label for="submittedAtFrom">Submitted at:              x</label>
             <input type="text" id="submittedAtFrom" class="datepicker" placeholder="from">
             <label for="submittedAtTo"> </label>
             <input type="text" id="submittedAtTo" class="datepicker" placeholder="to">
@@ -159,8 +159,8 @@
         <!-- Add margin-bottom to create space -->
         <div style="clear: both; margin-bottom: 10px;">
             <select id="columnSelect">
-                <option value="">Select Column</option>
-                <option value="timestamp">Submitted At</option>
+                <option value="">Select column</option>
+                <option value="timestamp">Submitted at</option>
                 <option value="Brand">Brand</option>
                 <option value="Staff member">Staff member</option>
                 <option value="Supplier">Supplier</option>
@@ -216,7 +216,7 @@
         <table id="logTable" class="table table-bordered table-striped">
             <thead>
                 <tr>
-                    <th data-column="timestamp">Submitted At</th>
+                    <th data-column="timestamp">Submitted at</th>
                     <th data-column="Brand">Brand</th>
                     <th data-column="Staff member">Staff member</th>
                     <th data-column="Supplier">Supplier</th>
@@ -273,7 +273,7 @@
     let allSubmissions = []; // Store all submissions
     let filteredSubmissions = []; // Store filtered submissions
     let currentSortColumn = 'timestamp'; // Default sort column
-    let currentSortDirection = 'desc'; // Default sort direction (descending for "Submitted At")
+    let currentSortDirection = 'desc'; // Default sort direction (descending for "Submitted at")
 
     // Datepicker initialization
     $(document).ready(function() {
@@ -303,7 +303,7 @@
                 return; // Exit if the file is empty
             }
 
-            // Sort by "Submitted At" in descending order (most recent first)
+            // Sort by "Submitted at" in descending order (most recent first)
             data.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 
             allSubmissions = data; // Store all submissions
