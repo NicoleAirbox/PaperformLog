@@ -156,53 +156,56 @@
                 <input type="text" id="shipmentArrivalTo" class="datepicker" placeholder="To Date">
             </div>
     
-            <!-- Add margin-bottom to create space -->
-            <div style="clear: both; margin-bottom: 10px;">
-                <select id="columnSelect">
-                    <option value="">Select Column</option>
-                    <option value="timestamp">Submitted At</option>
-                    <option value="Brand">Brand</option>
-                    <option value="Staff member">Staff member</option>
-                    <option value="Supplier">Supplier</option>
-                    <option value="Receiving warehouse">Receiving warehouse</option>
-                    <option value="Shipment type">Shipment type</option>
-                    <option value="Haulier/Courier">Haulier/Courier</option>
-                    <option value="Container type">Container type</option>
-                    <option value="Container unloading type">Container unloading type</option>
-                    <option value="Tracking">Tracking</option>
-                    <option value="Movement reference number (MRN)">Movement reference number (MRN)</option>
-                    <option value="MRN information">MRN information</option>
-                    <option value="Domestic delivery">Domestic delivery</option>
-                    <option value="Date of shipment arrival">Date of shipment arrival</option>
-                    <option value="Date of product launch">Date of product launch</option>
-                    <option value="Unit quantity">Unit quantity</option>
-                    <option value="Carton quantity">Carton quantity</option>
-                    <option value="Pallet quantity">Pallet quantity</option>
-                    <option value="Allocation type">Allocation type</option>
-                    <option value="Mixed shipment">Mixed shipment</option>
-                    <option value="ASN ID number(s)">ASN ID number(s)</option>
-                    <option value="Stock movement">Stock movement</option>
-                    <option value="Prepacks ASN file">Prepacks ASN file</option>
-                    <option value="Packing list name">Packing list name</option>
-                    <option value="Outer labels">Outer labels</option>
-                    <option value="Documents">Documents</option>
-                    <option value="System status">System status</option>
-                    <option value="Stock status">Stock status</option>
-                    <option value="Remedial work">Remedial work</option>
-                    <option value="Remedial work details">Remedial work details</option>
-                    <option value="Remedial work files">Remedial work files</option>
-                    <option value="Pre-order">Pre-order</option>
-                    <option value="Launch date of pre-order">Launch date of pre-order</option>
-                    <option value="Launch time of pre-order">Launch time of pre-order</option>
-                    <option value="Pre-order SKUs">Pre-order SKUs</option>
-                    <option value="Further comments">Further comments</option>
-                </select>
-            </div>
-    
+        <!-- Add margin-bottom to create space -->
+        <div style="clear: both; margin-bottom: 10px;">
+            <select id="columnSelect">
+                <option value="">Select Column</option>
+                <option value="timestamp">Submitted At</option>
+                <option value="Brand">Brand</option>
+                <option value="Staff member">Staff member</option>
+                <option value="Supplier">Supplier</option>
+                <option value="Receiving warehouse">Receiving warehouse</option>
+                <option value="Shipment type">Shipment type</option>
+                <option value="Haulier/Courier">Haulier/Courier</option>
+                <option value="Container type">Container type</option>
+                <option value="Container unloading type">Container unloading type</option>
+                <option value="Tracking">Tracking</option>
+                <option value="Movement reference number (MRN)">Movement reference number (MRN)</option>
+                <option value="MRN information">MRN information</option>
+                <option value="Domestic delivery">Domestic delivery</option>
+                <option value="Date of shipment arrival">Date of shipment arrival</option>
+                <option value="Date of product launch">Date of product launch</option>
+                <option value="Unit quantity">Unit quantity</option>
+                <option value="Carton quantity">Carton quantity</option>
+                <option value="Pallet quantity">Pallet quantity</option>
+                <option value="Allocation type">Allocation type</option>
+                <option value="Mixed shipment">Mixed shipment</option>
+                <option value="ASN ID number(s)">ASN ID number(s)</option>
+                <option value="Stock movement">Stock movement</option>
+                <option value="Prepacks ASN file">Prepacks ASN file</option>
+                <option value="Packing list name">Packing list name</option>
+                <option value="Outer labels">Outer labels</option>
+                <option value="Documents">Documents</option>
+                <option value="System status">System status</option>
+                <option value="Stock status">Stock status</option>
+                <option value="Remedial work">Remedial work</option>
+                <option value="Remedial work details">Remedial work details</option>
+                <option value="Remedial work files">Remedial work files</option>
+                <option value="Pre-order">Pre-order</option>
+                <option value="Launch date of pre-order">Launch date of pre-order</option>
+                <option value="Launch time of pre-order">Launch time of pre-order</option>
+                <option value="Pre-order SKUs">Pre-order SKUs</option>
+                <option value="Further comments">Further comments</option>
+            </select>
+        </div>
+
+        <!-- Wrap input and button in a div -->
+        <div style="text-align: center;">
             <input type="text" id="searchInput" placeholder="Enter search term">
             <button id="searchButton">Go</button>
-            <!-- Reset Button -->
-            <button id="resetButton" class="btn btn-secondary">Reset</button>
+        </div>
+        <!-- Reset Button -->
+        <button id="resetButton" class="btn btn-secondary">Reset</button>
         </div>
     <!-- CSV Download Button -->
     <button id="downloadCsvButton" class="btn btn-primary">Download as CSV</button>
