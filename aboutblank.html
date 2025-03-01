@@ -149,9 +149,12 @@
             <label for="shipmentArrivalTo">To:</label>
             <input type="text" id="shipmentArrivalTo" class="datepicker" placeholder="To Date">
         </div>
-
+        <div class="search-container">
+            <label for="searchBox">Enter search item:</label>
+            <input type="text" id="searchBox" name="searchBox">
+        </div>
         <!-- Column Search -->
-        <select id="columnSelect">
+        <select id="searchBox">
             <option value="">Select Column</option>
             <option value="timestamp">Submitted At</option>
             <option value="Brand">Brand</option>
@@ -190,7 +193,7 @@
             <option value="Pre-order SKUs">Pre-order SKUs</option>
             <option value="Further comments">Further comments</option>
         </select>
-        <input type="text" id="searchInput" placeholder="Enter search term">
+      
         <button id="searchButton">Go</button>
         <!-- Reset Button -->
         <button id="resetButton" class="btn btn-secondary">Reset</button>
