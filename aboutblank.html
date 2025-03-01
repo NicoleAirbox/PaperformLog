@@ -21,6 +21,10 @@
         width: 95%;
         margin: auto;
         }
+        .custom-datepicker-size {
+         transform: scale(0.7); /* Example: Scale down the entire calendar */
+         transform-origin: top left;
+        }
         h1 {
             text-align: center;
             margin-bottom: 30px;
@@ -96,7 +100,7 @@
         th[data-column="timestamp"], td:nth-child(1) { width: 150px; }
         th[data-column="Brand"], td:nth-child(2) { width: 130px; }
         th[data-column="Staff member"], td:nth-child(3) { width: 120px; }
-        th[data-column="Supplier"], td:nth-child(4) { width: 200px; }
+        th[data-column="Supplier"], td:nth-child(4) { width: 300px; }
         th[data-column="Receiving warehouse"], td:nth-child(5) { width: 150px; }
         th[data-column="Shipment type"], td:nth-child(6) { width: 120px; }
         th[data-column="Haulier/Courier"], td:nth-child(7) { width: 120px; }
@@ -260,11 +264,14 @@
 
     // Datepicker initialization
     $(document).ready(function() {
-        $('.datepicker').datepicker({
-            format: 'yyyy-mm-dd',
-            autoclose: true
-        });
-    });
+     $('.datepicker').datepicker({
+         format: 'yyyy-mm-dd',
+         autoclose: true,
+         onRender: function(date) { // Add this to the datepicker initialization
+             $(this.div).addClass('custom-datepicker-size'); // Add the class
+         }
+     });
+ });
     async function fetchSubmissions() {
         try {
             const response = await fetch('aboutblank.json');
