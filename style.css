@@ -2,7 +2,7 @@
 body {
     font-family: 'Quattrocento Sans', sans-serif;
     margin: 20px;
-    background-color: #f0f0f0; /* Light gray background */
+    background-color: #c7c7c7; /* Light gray background */
 }
 
 /* Container for Centering Content */
@@ -45,7 +45,7 @@ h1 {
 }
 
 #loginForm button {
-    background-color: #4CAF50; /* Green */
+    background-color: #5cb85c; /* Green */
     color: white;
     padding: 10px 15px;
     border: none;
