@@ -10,7 +10,25 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Quattrocento+Sans:wght@400;700&display=swap">
-
+    <head>
+        <script>
+            function checkPassword() {
+                let username = prompt("Username:");
+                let password = prompt("Password:");
+    
+                // Replace with your desired username and password
+                const correctUsername = "about:blank";
+                const correctPassword = "HFDbvhfdj67!";
+    
+                if (username === correctUsername && password === correctPassword) {
+                    // Authentication successful, do nothing (allow page to load)
+                } else {
+                    alert("Incorrect username or password. Please try again.");
+                    window.location.href = window.location.href; // Reload the page
+                }
+            }
+            checkPassword(); // Call the function when the page loads
+        </script>
     <style>
         body {
         font-family: 'Quattrocento Sans', sans-serif; /* Changed font-family */
