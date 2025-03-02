@@ -13,20 +13,35 @@
     <head>
         <script>
             function checkPassword() {
-                let username = prompt("Username:");
-                let password = prompt("Password:");
+                let storedUsername = localStorage.getItem('username');
+                let username;
+                let password;
     
-                // Replace with your desired username and password
+                if (storedUsername) {
+                    username = prompt("Username:", storedUsername); // Pre-fill username
+                } else {
+                    username = prompt("Username:");
+                }
+    
+                password = prompt("Password:");
+    
                 const correctUsername = "about:blank";
                 const correctPassword = "HFDbvhfdj67!";
     
                 if (username === correctUsername && password === correctPassword) {
+                    let rememberMe = confirm("Remember username for next time?");
+                    if (rememberMe) {
+                        localStorage.setItem('username', username);
+                    } else {
+                        localStorage.removeItem('username'); // Clear if not remembered
+                    }
                     // Authentication successful, do nothing (allow page to load)
                 } else {
                     alert("Incorrect username or password. Please try again.");
                     window.location.href = window.location.href; // Reload the page
                 }
             }
+    
             checkPassword(); // Call the function when the page loads
         </script>
     <style>
