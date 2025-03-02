@@ -201,7 +201,9 @@
         <a href="https://wms.airboxfulfilment.com/Stock/ASNs/" class="btn btn-primary" style="margin-right: 5px; background-color: rgb(133, 133, 133); color: rgb(255, 255, 255); border-color: #6d6d6d; text-decoration: none; padding: 8px 12px;border: none;border-radius: 4px;cursor: pointer;">View your ASNs</a>
     </div>
     
-
+    <div id="loadingIndicator" style="text-align: center; padding: 20px; display: none;">
+        Loading submissions...
+    </div>
     <div class="table-container">
         <table id="logTable" class="table table-bordered table-striped">
             <thead>
@@ -275,37 +277,42 @@
          }
      });
  });
-    async function fetchSubmissions() {
-        try {
-            const response = await fetch('aboutblank.json');
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            const text = await response.text(); // Get the response as text
-            let data = [];
+ async function fetchSubmissions() {
+    const loadingIndicator = document.getElementById("loadingIndicator");
+    loadingIndicator.style.display = "block"; // Show the loading indicator
 
-            if (text) { // Check if the response is not empty
-                try {
-                    data = JSON.parse(text); // Try to parse it as JSON
-                } catch (e) {
-                    console.error("Error parsing JSON:", e);
-                    return; // Exit if parsing fails
-                }
-            } else {
-                console.log("aboutblank.json is empty.");
-                return; // Exit if the file is empty
-            }
-
-            // Sort by "Submitted at" in descending order (most recent first)
-            data.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-
-            allSubmissions = data; // Store all submissions
-            filteredSubmissions = [...allSubmissions]; // Initially, filtered submissions are all submissions
-            renderTable(filteredSubmissions);
-        } catch (error) {
-            console.error("Error fetching submissions:", error);
+    try {
+        const response = await fetch('aboutblank.json');
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
         }
+        const text = await response.text(); // Get the response as text
+        let data = [];
+
+        if (text) { // Check if the response is not empty
+            try {
+                data = JSON.parse(text); // Try to parse it as JSON
+            } catch (e) {
+                console.error("Error parsing JSON:", e);
+                return; // Exit if parsing fails
+            }
+        } else {
+            console.log("aboutblank.json is empty.");
+            return; // Exit if the file is empty
+        }
+
+        // Sort by "Submitted at" in descending order (most recent first)
+        data.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+        allSubmissions = data; // Store all submissions
+        filteredSubmissions = [...allSubmissions]; // Initially, filtered submissions are all submissions
+        renderTable(filteredSubmissions);
+    } catch (error) {
+        console.error("Error fetching submissions:", error);
+    } finally {
+        loadingIndicator.style.display = "none"; // Hide the loading indicator
     }
+}
 
     function renderTable(data) {
         const table = document.getElementById("logTable").getElementsByTagName('tbody')[0];
