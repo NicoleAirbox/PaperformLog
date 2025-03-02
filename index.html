@@ -1,39 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>SRN Request Form: Live Submission Log</title>
-        <!-- Custom CSS -->
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Quattrocento+Sans:wght@400;700&display=swap">
-    
-    <style>
-        body {
-        font-family: 'Quattrocento Sans', sans-serif; /* Changed font-family */
-        margin: 20px;
-        background-color: #c7c7c7; /* Add this line */
-        }
-        .container {
-        width: 95%;
-        margin: auto;
-        }
-        h1 {
-            text-align: center;
-            margin-bottom: 30px;
-            font-weight: bold;
-        }
-    </style>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SRN Request Form: Live Submission Log</title>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Quattrocento+Sans:wght@400;700&display=swap">
+    <link rel="stylesheet" href="style.css"> <!-- Move CSS to style.css -->
 </head>
 <body>
-
     <div class="container">
         <div style="text-align: center;">
             <img src="ABFnoback.png" alt="Your Logo" style="max-height: 200px; margin-bottom: 20px;">
         </div>
-        <h1 style="text-align: center;">
-            SRN Request Form: Live Submission Log
-        </h1>
+        <h1>SRN Request Form: Live Submission Log</h1>
     </div>
+    <div id="loginForm">
+        <form id="loginFormElement" onsubmit="return false;"> <!-- Added form element -->
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" aria-label="Username"><br><br>
 
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" aria-label="Password"><br><br>
+
+            <p id="loginError" style="color: red; display: none;">Invalid username or password.</p> <!-- Moved error message -->
+            <button onclick="login()">Login</button>
+        </form>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>
